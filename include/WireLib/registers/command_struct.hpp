@@ -30,7 +30,7 @@ struct Command
      * Also runs an optional runnable once the register is called
      * 
      * @param reg `uint8_t` The register this is associated with
-     * @param value `float&` The reference to the value to set
+     * @param value `float*` The pointer to the value to set
      * @param runnable `std::function<void()>` Runnable to run when the command is recieved
      * @return `Command` The associated command struct 
      */

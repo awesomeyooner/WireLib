@@ -1,5 +1,6 @@
 #include "WireLib/registers/command_struct.hpp"
 
+
 Command Command::make_float(uint8_t reg, float* value, std::function<void()> runnable)
 {
     return Command{
@@ -46,5 +47,5 @@ Command Command::make_runnable(uint8_t reg, std::function<void()> runnable)
             return status_utils::StatusCode::OK;
         }
     };
-    
+
 } // end of "make_runnable"
