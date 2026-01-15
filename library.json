@@ -1,6 +1,6 @@
 {
   "name": "WireLib",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Helper functions for creating custom registers using various types of communication, like I2C or CAN",
   "keywords": "",
   "repository":

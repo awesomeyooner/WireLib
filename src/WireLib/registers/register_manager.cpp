@@ -90,6 +90,13 @@ void RegisterManager::add_command(uint8_t reg, int length, std::function<status_
 } // end of "add_command"
 
 
+uint8_t RegisterManager::extract_register()
+{
+    return m_read_buffer.at(0);
+
+} // end of "extract_register"
+
+
 std::vector<uint8_t> RegisterManager::extract_data()
 {
     // Copy the read data to another buffer

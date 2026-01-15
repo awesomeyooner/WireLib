@@ -81,15 +81,26 @@ class RegisterManager
          */
         static void add_command(uint8_t reg, int length, std::function<status_utils::StatusCode(std::vector<uint8_t>*)> runnable);
 
+        /**
+         * @brief Extracts only the register byte of the read buffer (the first element)
+         * 
+         * @return `uint8_t` The register 
+         */
+        static uint8_t extract_register();
+
+        /**
+         * @brief Extracts only the data part of the read buffer (removes the first element)
+         * 
+         * @return `std::vector<uint8_t>` The data buffer 
+         */
+        static std::vector<uint8_t> extract_data();
+
     private:
 
         // Maps to get the request / command associated with a register (uint8_t)
         static std::unordered_map<uint8_t, Request> m_request_map;
         static std::unordered_map<uint8_t, Command> m_command_map;
-
-
-        static std::vector<uint8_t> extract_data();
-
+        
 }; // class RegisterManager
 
 #endif // REGISTER_MANAGER_HPP
