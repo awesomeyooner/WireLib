@@ -37,7 +37,8 @@ struct Command
     static Command make_float(uint8_t reg, float* value, std::function<void()> runnable = NULL);
 
     /**
-     * @brief Makes a command that runs the runnable when the register is called
+     * @brief Makes a command that runs the runnable when the register is called.
+     * You would typically use this when the register acts as a "button"
      * 
      * @param reg `uint8_t` The register this is associated with
      * @param runnable `std::function<void()>` Runnable to run whent he command is recieved
