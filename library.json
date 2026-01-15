@@ -1,0 +1,26 @@
+{
+  "name": "WireLib",
+  "version": "1.0.0",
+  "description": "Helper functions for creating custom registers using various types of communication, like I2C or CAN",
+  "keywords": "",
+  "repository":
+  {
+    "type": "git",
+    "url": "https://github.com/awesomeyooner/WireLib.git"
+  },
+  "authors":
+  [
+    {
+      "name": "Aaron Yoon",
+      "email": "aaronyoon324@gmail.com",
+      "url": "https://awesomeyooner.github.io/contact.html",
+      "maintainer": true
+    }
+  ],
+  "license": "MIT",
+  "dependencies": {
+    
+  },
+  "frameworks": "*",
+  "platforms": "*"
+}
