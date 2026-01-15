@@ -25,6 +25,18 @@ struct Command
     // What runs after the register is called
     std::function<status_utils::StatusCode(std::vector<uint8_t>*)> m_runnable;
 
+
+    /**
+     * @brief Makes a command that takes in incoming bytes as a `double` and sets it to `value`.
+     * Also runs an optional runnable once the register is called
+     * 
+     * @param reg `uint8_t` The register this is associated with
+     * @param value `double*` The pointer to the value to set
+     * @param runnable `std::function<void()>` Runnable to run when the command is recieved
+     * @return `Command` The associated command struct 
+     */
+    static Command make_double(uint8_t reg, double* value, std::function<void()> runnable = NULL);
+
     /**
      * @brief Makes a command that takes in incoming bytes as a `float` and sets it to `value`.
      * Also runs an optional runnable once the register is called
