@@ -88,3 +88,18 @@ void RegisterManager::add_command(uint8_t reg, int length, std::function<status_
     add_command(command);
 
 } // end of "add_command"
+
+
+std::vector<uint8_t> RegisterManager::extract_data()
+{
+    // Copy the read data to another buffer
+    std::vector<uint8_t> data = m_read_buffer;
+
+    // Remove the first element (the register byte)
+    data.erase(data.begin());
+
+    // Return the buffer. It is the read buffer but without the first byte
+    // which is / should be the register byte
+    return data;
+
+} // end of "extract_data"

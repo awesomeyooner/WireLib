@@ -87,6 +87,9 @@ class RegisterManager
         static std::unordered_map<uint8_t, Request> m_request_map;
         static std::unordered_map<uint8_t, Command> m_command_map;
 
+
+        static std::vector<uint8_t> extract_data();
+
 }; // class RegisterManager
 
 #endif // REGISTER_MANAGER_HPP
