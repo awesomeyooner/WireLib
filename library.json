@@ -19,7 +19,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    
+    "awesomeyooner/EmbeddedLib": "*"
   },
   "frameworks": "*",
   "platforms": "*"
