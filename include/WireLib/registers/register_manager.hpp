@@ -62,7 +62,7 @@ class RegisterManager
          * @param length `int` The length of the data to send in bytes
          * @param runnable `std::function<status_utils::StatusCode()>` The runnable that will send the data
          */
-        static void add_request(uint8_t reg, int length, std::function<status_utils::StatusCode()> runnable);
+        static void add_request(uint8_t reg, int length, std::function<status_utils::StatusCode(std::vector<uint8_t>*)> runnable);
 
         /**
          * @brief Add a command to the command map

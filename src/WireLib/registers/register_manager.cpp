@@ -18,7 +18,7 @@ status_utils::StatusCode RegisterManager::update(uint8_t reg, std::vector<uint8_
     // If the register exists, call its runnable
     if(m_request_map.find(reg) != m_request_map.end()){
         // Serial.println("Request Map Called");
-        return m_request_map.at(reg).m_runnable();
+        return m_request_map.at(reg).m_runnable(&m_write_buffer);
     }
     
     // If the register exists, call its runnable
@@ -54,7 +54,7 @@ void RegisterManager::add_request(Request request)
 } // end of "add_request"
 
 
-void RegisterManager::add_request(uint8_t reg, int length, std::function<status_utils::StatusCode()> runnable)
+void RegisterManager::add_request(uint8_t reg, int length, std::function<status_utils::StatusCode(std::vector<uint8_t>*)> runnable)
 {
     Request request = 
     {

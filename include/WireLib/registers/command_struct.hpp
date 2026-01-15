@@ -22,7 +22,8 @@ struct Command
     // The length of the data packet to recieve
     int m_length;
 
-    // What runs after the register is called
+    // The runnable that uses the incoming data. The parameter is the pointer to
+    // the read buffer that contains the data read from the host
     std::function<status_utils::StatusCode(std::vector<uint8_t>*)> m_runnable;
 
 

@@ -23,8 +23,9 @@ struct Request
     // The length of the data packet to send
     int m_length;
 
-    // The function to send the data back to the host
-    std::function<status_utils::StatusCode()> m_runnable;
+    // The function to send the data back to the host. The parameter is a pointer
+    // to the buffer that will write back to the host
+    std::function<status_utils::StatusCode(std::vector<uint8_t>*)> m_runnable;
 
 
     /**
@@ -33,11 +34,9 @@ struct Request
      * 
      * @param reg `uint8_t` The register this is associated with
      * @param value `double*` The pointer to the value to send back to the host
-     * @param write_buffer `std::vector<uint8_t>*` The pointer to the write buffer for
-     * the specific communication layer of your choosing
      * @return `Request` The associated request struct 
      */
-    static Request make_double(uint8_t reg, double* value, std::vector<uint8_t>* write_buffer);
+    static Request make_double(uint8_t reg, double* value);
 
     /**
      * @brief Makes a request that sends the double retrieved by `double_getter` and stores it
@@ -45,11 +44,9 @@ struct Request
      * 
      * @param reg `uint8_t` The register this is associated with
      * @param double_getter `std::function<double()>` Runnable that returns a float
-     * @param write_buffer `std::vector<uint8_t>*` The pointer to the write buffer for
-     * the specific communication layer of your choosing
      * @return `Request` The associated request struct 
      */
-    static Request make_double(uint8_t reg, std::function<double()> double_getter, std::vector<uint8_t>* write_buffer);
+    static Request make_double(uint8_t reg, std::function<double()> double_getter);
 
     /**
      * @brief Makes a request that sends the float associated with `value` and stores it
@@ -57,11 +54,9 @@ struct Request
      * 
      * @param reg `uint8_t` The register this is associated with
      * @param value `float*` The pointer to the value to send back to the host
-     * @param write_buffer `std::vector<uint8_t>*` The pointer to the write buffer for
-     * the specific communication layer of your choosing
      * @return `Request` The associated request struct 
      */
-    static Request make_float(uint8_t reg, float* value, std::vector<uint8_t>* write_buffer);
+    static Request make_float(uint8_t reg, float* value);
 
     /**
      * @brief Makes a request that sends the float retrieved by `float_getter` and stores it
@@ -73,7 +68,7 @@ struct Request
      * the specific communication layer of your choosing
      * @return `Request` The associated request struct 
      */
-    static Request make_float(uint8_t reg, std::function<float()> float_getter, std::vector<uint8_t>* write_buffer);
+    static Request make_float(uint8_t reg, std::function<float()> float_getter);
 
     /**
      * @brief Makes a request that sends the byte associated with `value` and stores it
@@ -81,11 +76,9 @@ struct Request
      * 
      * @param reg `uint8_t` The register this is associated with
      * @param value `int8_t*` The pointer to the value to send back to the host
-     * @param write_buffer `std::vector<uint8_t>*` The pointer to the write buffer for
-     * the specific communication layer of your choosing
      * @return `Request` The associated request struct 
      */
-    static Request make_byte(uint8_t reg, int8_t* value, std::vector<uint8_t>* write_buffer);
+    static Request make_byte(uint8_t reg, int8_t* value);
 
     /**
      * @brief Makes a request that sends the byte associated with `value` and stores it
@@ -93,11 +86,9 @@ struct Request
      * 
      * @param reg `uint8_t` The register this is associated with
      * @param byte_getter `std::function<uint8_t()>` Runnable that returns a `uint8_t`
-     * @param write_buffer `std::vector<uint8_t>*` The pointer to the write buffer for
-     * the specific communication layer of your choosing
      * @return `Request` The associated request struct 
      */
-    static Request make_byte(uint8_t reg, std::function<int8_t()> byte_getter, std::vector<uint8_t>* write_buffer);
+    static Request make_byte(uint8_t reg, std::function<int8_t()> byte_getter);
 
     /**
      * @brief Makes a request that sends the byte associated with `value` and stores it
@@ -105,11 +96,9 @@ struct Request
      * 
      * @param reg `uint8_t` The register this is associated with
      * @param value `uint8_t*` The pointer to the value to send back to the host
-     * @param write_buffer `std::vector<uint8_t>*` The pointer to the write buffer for
-     * the specific communication layer of your choosing
      * @return `Request` The associated request struct 
      */
-    static Request make_byte(uint8_t reg, uint8_t* value, std::vector<uint8_t>* write_buffer);
+    static Request make_byte(uint8_t reg, uint8_t* value);
 
     /**
      * @brief Makes a request that sends the byte associated with `value` and stores it
@@ -117,11 +106,9 @@ struct Request
      * 
      * @param reg `uint8_t` The register this is associated with
      * @param byte_getter `std::function<uint8_t()>` Runnable that returns a `uint8_t`
-     * @param write_buffer `std::vector<uint8_t>*` The pointer to the write buffer for
-     * the specific communication layer of your choosing
      * @return `Request` The associated request struct 
      */
-    static Request make_byte(uint8_t reg, std::function<uint8_t()> byte_getter, std::vector<uint8_t>* write_buffer);
+    static Request make_byte(uint8_t reg, std::function<uint8_t()> byte_getter);
 
 }; // struct Request
 

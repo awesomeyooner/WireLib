@@ -1,7 +1,7 @@
 #include "WireLib/registers/request_struct.hpp"
 
 
-Request Request::make_double(uint8_t reg, double* value, std::vector<uint8_t>* write_buffer)
+Request Request::make_double(uint8_t reg, double* value)
 {
     return Request{
         // Sets the register equat to the given register
@@ -11,7 +11,7 @@ Request Request::make_double(uint8_t reg, double* value, std::vector<uint8_t>* w
         .m_length = sizeof(double),
 
         // Converts `value` into bytes and copies it to the write buffer
-        .m_runnable = [value, write_buffer]() -> status_utils::StatusCode
+        .m_runnable = [value](std::vector<uint8_t>* write_buffer) -> status_utils::StatusCode
         {
             // Convert the data to send into bytes
             std::vector<uint8_t> bytes = ByteConverter::double_to_bytes(*value);
@@ -28,7 +28,7 @@ Request Request::make_double(uint8_t reg, double* value, std::vector<uint8_t>* w
 } // end of "make_double"
 
 
-Request Request::make_double(uint8_t reg, std::function<double()> double_getter, std::vector<uint8_t>* write_buffer)
+Request Request::make_double(uint8_t reg, std::function<double()> double_getter)
 {
     return Request{
         // Sets the register equat to the given register
@@ -38,7 +38,7 @@ Request Request::make_double(uint8_t reg, std::function<double()> double_getter,
         .m_length = sizeof(float),
 
         // Converts the float from `float_getter` into bytes and copies it to the write buffer
-        .m_runnable = [double_getter, write_buffer]() -> status_utils::StatusCode
+        .m_runnable = [double_getter](std::vector<uint8_t>* write_buffer) -> status_utils::StatusCode
         {
             // Convert the data to send into bytes
             std::vector<uint8_t> bytes = ByteConverter::double_to_bytes(double_getter());
@@ -55,7 +55,7 @@ Request Request::make_double(uint8_t reg, std::function<double()> double_getter,
 } // end of "make_double"
 
 
-Request Request::make_float(uint8_t reg, float* value, std::vector<uint8_t>* write_buffer)
+Request Request::make_float(uint8_t reg, float* value)
 {
     return Request{
         // Sets the register equat to the given register
@@ -65,7 +65,7 @@ Request Request::make_float(uint8_t reg, float* value, std::vector<uint8_t>* wri
         .m_length = sizeof(float),
 
         // Converts `value` into bytes and copies it to the write buffer
-        .m_runnable = [value, write_buffer]() -> status_utils::StatusCode
+        .m_runnable = [value](std::vector<uint8_t>* write_buffer) -> status_utils::StatusCode
         {
             // Convert the data to send into bytes
             std::vector<uint8_t> bytes = ByteConverter::float_to_bytes(*value);
@@ -82,7 +82,7 @@ Request Request::make_float(uint8_t reg, float* value, std::vector<uint8_t>* wri
 } // end of "make_float"
 
 
-Request Request::make_float(uint8_t reg, std::function<float()> float_getter, std::vector<uint8_t>* write_buffer)
+Request Request::make_float(uint8_t reg, std::function<float()> float_getter)
 {
     return Request{
         // Sets the register equat to the given register
@@ -92,7 +92,7 @@ Request Request::make_float(uint8_t reg, std::function<float()> float_getter, st
         .m_length = sizeof(float),
 
         // Converts the float from `float_getter` into bytes and copies it to the write buffer
-        .m_runnable = [float_getter, write_buffer]() -> status_utils::StatusCode
+        .m_runnable = [float_getter](std::vector<uint8_t>* write_buffer) -> status_utils::StatusCode
         {
             // Convert the data to send into bytes
             std::vector<uint8_t> bytes = ByteConverter::float_to_bytes(float_getter());
@@ -109,7 +109,7 @@ Request Request::make_float(uint8_t reg, std::function<float()> float_getter, st
 } // end of "make_float"
 
 
-Request Request::make_byte(uint8_t reg, int8_t* value, std::vector<uint8_t>* write_buffer)
+Request Request::make_byte(uint8_t reg, int8_t* value)
 {
     return Request{
         // Sets the register equat to the given register
@@ -119,7 +119,7 @@ Request Request::make_byte(uint8_t reg, int8_t* value, std::vector<uint8_t>* wri
         .m_length = 1,
 
         // Converts `value` into bytes and copies it to the write buffer
-        .m_runnable = [value, write_buffer]() -> status_utils::StatusCode
+        .m_runnable = [value](std::vector<uint8_t>* write_buffer) -> status_utils::StatusCode
         {
             // Since the value is already a byte, just convert it to unsigned
             std::vector<uint8_t> bytes = {(uint8_t)*value};
@@ -136,7 +136,7 @@ Request Request::make_byte(uint8_t reg, int8_t* value, std::vector<uint8_t>* wri
 } // end of "make_byte"
 
 
-Request Request::make_byte(uint8_t reg, std::function<int8_t()> byte_getter, std::vector<uint8_t>* write_buffer)
+Request Request::make_byte(uint8_t reg, std::function<int8_t()> byte_getter)
 {
     return Request{
         // Sets the register equat to the given register
@@ -146,7 +146,7 @@ Request Request::make_byte(uint8_t reg, std::function<int8_t()> byte_getter, std
         .m_length = 1,
 
         // Converts the float from `float_getter` into bytes and copies it to the write buffer
-        .m_runnable = [byte_getter, write_buffer]() -> status_utils::StatusCode
+        .m_runnable = [byte_getter](std::vector<uint8_t>* write_buffer) -> status_utils::StatusCode
         {
             // Convert the data to send into bytes
             std::vector<uint8_t> bytes = {(uint8_t)byte_getter()};
@@ -163,7 +163,7 @@ Request Request::make_byte(uint8_t reg, std::function<int8_t()> byte_getter, std
 } // end of "make_byte"
 
 
-Request Request::make_byte(uint8_t reg, uint8_t* value, std::vector<uint8_t>* write_buffer)
+Request Request::make_byte(uint8_t reg, uint8_t* value)
 {
     return Request{
         // Sets the register equat to the given register
@@ -173,7 +173,7 @@ Request Request::make_byte(uint8_t reg, uint8_t* value, std::vector<uint8_t>* wr
         .m_length = 1,
 
         // Converts `value` into bytes and copies it to the write buffer
-        .m_runnable = [value, write_buffer]() -> status_utils::StatusCode
+        .m_runnable = [value](std::vector<uint8_t>* write_buffer) -> status_utils::StatusCode
         {
             // Since the value is already a byte, just populate the array with it
             std::vector<uint8_t> bytes = {*value};
@@ -190,7 +190,7 @@ Request Request::make_byte(uint8_t reg, uint8_t* value, std::vector<uint8_t>* wr
 } // end of "make_byte"
 
 
-Request Request::make_byte(uint8_t reg, std::function<uint8_t()> byte_getter, std::vector<uint8_t>* write_buffer)
+Request Request::make_byte(uint8_t reg, std::function<uint8_t()> byte_getter)
 {
     return Request{
         // Sets the register equat to the given register
@@ -200,7 +200,7 @@ Request Request::make_byte(uint8_t reg, std::function<uint8_t()> byte_getter, st
         .m_length = 1,
 
         // Converts the float from `float_getter` into bytes and copies it to the write buffer
-        .m_runnable = [byte_getter, write_buffer]() -> status_utils::StatusCode
+        .m_runnable = [byte_getter](std::vector<uint8_t>* write_buffer) -> status_utils::StatusCode
         {
             // Convert the data to send into bytes
             std::vector<uint8_t> bytes = {byte_getter()};
