@@ -35,6 +35,15 @@ class RegisterManager
         static status_utils::StatusCode update(uint8_t reg, std::vector<uint8_t>* incoming_data);
 
         /**
+         * @brief Runs the register associated with the one defined in the read buffer and uses the data
+         * inside of it as well. Returns FAILED if something goes wrong.
+         * 
+         * @return `status_utils::StatusCode` FAILED if neither maps contain the associated register or
+         * if the runnable inside the register fails. OK otherwise 
+         */
+        static status_utils::StatusCode update();
+        
+        /**
          * @brief Gets the pointer to the read buffer
          * 
          * @return `std::vector<uint8_t>*` The pointer to the read buffer 
