@@ -1,9 +1,10 @@
 #ifndef WIRE_MANAGER_HPP
 #define WIRE_MANAGER_HPP
 
-#include <Wire.h>
+#include "WireLib/communication/communication_interface.hpp"
 
 #include "WireLib/registers/register_manager.hpp"
+
 
 class WireManager
 {
@@ -33,6 +34,8 @@ class WireManager
         static void on_request();
 
     private:
+
+        static CommunicationInterface m_interface;
 
 
 }; // class WireManager

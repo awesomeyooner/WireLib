@@ -4,11 +4,11 @@
 void WireManager::initialize(int address)
 {
     // Start the I2C interface with the given address
-    Wire.begin(address);
+    // Wire.begin(address);
 
     // Link the on recieve and request functions
-    Wire.onReceive(on_recieve);
-    Wire.onRequest(on_request);
+    // Wire.onReceive(on_recieve);
+    // Wire.onRequest(on_request);
 
 } // end of "initialize"
 
@@ -22,12 +22,12 @@ void WireManager::on_recieve(int num_bytes)
     read_buffer->clear();
 
     // Store all the read data into the buffer
-    while(Wire.available())
-    {
-        uint8_t incoming = Wire.read();
+    // while(Wire.available())
+    // {
+    //     uint8_t incoming = Wire.read();
 
-        read_buffer->push_back(incoming);
-    }
+    //     read_buffer->push_back(incoming);
+    // }
 
     // Update the registers using the incoming data
     RegisterManager::update();
@@ -38,9 +38,9 @@ void WireManager::on_recieve(int num_bytes)
 void WireManager::on_request()
 {
     // Write every byte in the buffer
-    for(uint8_t byte : *RegisterManager::get_write_buffer())
-    {
-        Wire.write(byte);
-    }
+    // for(uint8_t byte : *RegisterManager::get_write_buffer())
+    // {
+    //     Wire.write(byte);
+    // }
 
 } // end of "on_request"

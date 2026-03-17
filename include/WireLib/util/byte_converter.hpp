@@ -1,7 +1,6 @@
 #ifndef BYTE_CONVERTER_HPP
 #define BYTE_CONVERTER_HPP
 
-#include <Wire.h>
 #include <string>
 #include <vector>
 #include <cstring>
