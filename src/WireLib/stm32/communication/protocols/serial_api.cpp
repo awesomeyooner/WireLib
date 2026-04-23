@@ -1,9 +1,11 @@
 #include "WireLib/communication/protocols/serial_api.hpp"
 
-// Example
+#include "WireLib/communication/protocols/serial_interface.hpp"
+
+
 bool Serial_on_receive(uint8_t* buffer, uint32_t length)
 {
     // Call the C++ version
-    // return USBFS::on_receive(buffer, length);
+    return Serial.on_receive(buffer, static_cast<int>(length)) == status_utils::StatusCode::OK;
 
-} // end of "USBFS_on_receive(uint8_t*, uint32_t*)"
+} // end of "Serial_on_receive(uint8_t*, int*)"
