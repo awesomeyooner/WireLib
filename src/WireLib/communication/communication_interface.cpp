@@ -1,14 +1,17 @@
 #include "WireLib/communication/communication_interface.hpp"
 
 
-void CommunicationInterface::configure_on_receive(std::function<bool(const std::vector<uint8_t>&)> callback)
+using namespace status_utils;
+
+
+void CommunicationInterface::configure_on_receive(std::function<StatusCode(const std::vector<uint8_t>&)> callback)
 {
     m_receive_callback = callback;
 
 } // end of "configure_on_receive(std::function<bool(const std::vector<uint8_t>&)>)"
 
 
-bool CommunicationInterface::on_receive(uint8_t* buffer, uint32_t length)
+StatusCode CommunicationInterface::on_receive(uint8_t* buffer, int length)
 {
     // Fill the read buffer
     m_read_buffer.assign(buffer, buffer + length);
@@ -18,13 +21,6 @@ bool CommunicationInterface::on_receive(uint8_t* buffer, uint32_t length)
     if(m_receive_callback)
         return m_receive_callback(m_read_buffer);
 
-    return true;
+    return StatusCode::OK;
 
-} // end of "on_receive(uint8_t*, uint32_t)"
-
-
-bool CommunicationInterface::transmit_bytes(const std::vector<uint8_t>& bytes)
-{
-    // Implement!!
-    
-} // end of "transmit_bytes(const std::vector<uint8_t>&)"
+} // end of "on_receive(uint8_t*, int)"

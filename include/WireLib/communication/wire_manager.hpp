@@ -35,7 +35,7 @@ class WireManager
 
     private:
 
-        static CommunicationInterface m_interface;
+        // static CommunicationInterface m_interface;
 
 
 }; // class WireManager
