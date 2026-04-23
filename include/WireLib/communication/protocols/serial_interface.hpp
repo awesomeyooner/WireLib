@@ -1,5 +1,5 @@
-#ifndef SERIAL_HPP
-#define SERIAL_HPP
+#ifndef SERIAL_INTERFACE_HPP
+#define SERIAL_INTERFACE_HPP
 
 #include "EmbeddedLib/System.hpp"
 #include "EmbeddedLib/util/string_util.hpp"
@@ -45,4 +45,7 @@ class SerialInterface : public CommunicationInterface
 }; // class Serial
 
 
-#endif // SERIAL_HPP
+extern SerialInterface Serial;
+
+
+#endif // SERIAL_INTERFACE_HPP

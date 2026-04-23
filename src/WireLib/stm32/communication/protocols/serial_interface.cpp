@@ -117,4 +117,7 @@ StatusCode SerialInterface::error(double data)
 } // end of "error(double)"
 
 
+SerialInterface Serial;
+
+
 #endif // STM32CUBE
