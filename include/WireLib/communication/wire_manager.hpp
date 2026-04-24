@@ -21,17 +21,25 @@ class WireManager
 
         /**
          * @brief Callback function for what to do when the host sends data.
-         * Internally, it stores the data in the read buffer and updates the registers
-         * @param num_bytes `int` The number of bytes to read
+         * Internally, it stores the data in the read buffer and updates the registers. This should be
+         * attached to any communication interface's callback
+         * @param bytes `const std::vector<uint8_t>&` The read bytes
          */
-        static void on_recieve(int num_bytes);
+        static status_utils::StatusCode on_receive(const std::vector<uint8_t>& bytes);
 
         /**
          * @brief Callback function for what to do when the host requests data.
          * Internally, it writes whatevers in the write buffer
          * 
          */
-        static void on_request();
+        static status_utils::StatusCode on_request();
+
+        /**
+         * @brief Attach WireManager's on_receive callback to the given interface's callback
+         * 
+         * @param interface `CommunicationInterface&` The given interface
+         */
+        static void attach(CommunicationInterface& interface);
 
     private:
 

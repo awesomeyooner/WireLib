@@ -1,5 +1,6 @@
 #include "WireLib/registers/register_manager.hpp"
-
+#include "WireLib/communication/protocols/serial_interface.hpp"
+#include "ActionLib/ActionManager.hpp"
 
 // Initialize the static members
 std::vector<uint8_t> RegisterManager::m_read_buffer;
@@ -109,11 +110,11 @@ uint8_t RegisterManager::extract_register()
 
 std::vector<uint8_t> RegisterManager::extract_data()
 {
-    // Copy the read data to another buffer
-    std::vector<uint8_t> data = m_read_buffer;
+    // Copy the read data to another buffer but skip the first one since it's the register
+    std::vector<uint8_t> data(m_read_buffer.begin() + 1, m_read_buffer.end());
 
     // Remove the first element (the register byte)
-    data.erase(data.begin());
+    // data.erase(data.begin());
 
     // Return the buffer. It is the read buffer but without the first byte
     // which is / should be the register byte

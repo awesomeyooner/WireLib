@@ -1,6 +1,9 @@
 #include "WireLib/communication/wire_manager.hpp"
 
 
+using namespace status_utils;
+
+
 void WireManager::initialize(int address)
 {
     // Start the I2C interface with the given address
@@ -13,29 +16,21 @@ void WireManager::initialize(int address)
 } // end of "initialize"
 
 
-void WireManager::on_recieve(int num_bytes)
+StatusCode WireManager::on_receive(const std::vector<uint8_t>& bytes)
 {
     // Shorthand for the read buffer
     std::vector<uint8_t>* read_buffer = RegisterManager::get_read_buffer();
 
-    // Clear the buffer
-    read_buffer->clear();
-
-    // Store all the read data into the buffer
-    // while(Wire.available())
-    // {
-    //     uint8_t incoming = Wire.read();
-
-    //     read_buffer->push_back(incoming);
-    // }
+    // Copy the contents of the incoming bytes to RegisterManager's bytes
+    read_buffer->assign(bytes.begin(), bytes.end());
 
     // Update the registers using the incoming data
-    RegisterManager::update();
+    return RegisterManager::update();
 
 } // end of "on_recieve"
 
 
-void WireManager::on_request()
+StatusCode WireManager::on_request()
 {
     // Write every byte in the buffer
     // for(uint8_t byte : *RegisterManager::get_write_buffer())
@@ -44,3 +39,15 @@ void WireManager::on_request()
     // }
 
 } // end of "on_request"
+
+
+void WireManager::attach(CommunicationInterface& interface)
+{
+    // Attach the on_receive callback of the interface to WireManager
+    interface.configure_on_receive(
+        [](const std::vector<uint8_t>& bytes) -> StatusCode
+        {
+            return WireManager::on_receive(bytes);
+        }
+    );
+}
