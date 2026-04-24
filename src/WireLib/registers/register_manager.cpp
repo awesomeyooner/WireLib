@@ -10,7 +10,7 @@ std::unordered_map<uint8_t, Request> RegisterManager::m_request_map;
 std::unordered_map<uint8_t, Command> RegisterManager::m_command_map;
 
 
-status_utils::StatusCode RegisterManager::update(uint8_t reg, std::vector<uint8_t>* incoming_data)
+status_utils::StatusCode RegisterManager::update(uint8_t reg, const std::vector<uint8_t>& incoming_data)
 {
     // If both the maps are empty, return FAILED
     if(m_request_map.empty() && m_command_map.empty())
@@ -19,7 +19,7 @@ status_utils::StatusCode RegisterManager::update(uint8_t reg, std::vector<uint8_
     // If the register exists, call its runnable
     if(m_request_map.find(reg) != m_request_map.end()){
         // Serial.println("Request Map Called");
-        return m_request_map.at(reg).m_runnable(&m_write_buffer);
+        return m_request_map.at(reg).m_runnable(m_write_buffer);
     }
     
     // If the register exists, call its runnable
@@ -38,21 +38,27 @@ status_utils::StatusCode RegisterManager::update()
     uint8_t reg = extract_register();
     std::vector<uint8_t> data = extract_data();
 
-    return update(reg, &data);
+    return update(reg, data);
 
 } // end of "update"
 
 
-std::vector<uint8_t>* RegisterManager::get_read_buffer()
+void RegisterManager::set_read_buffer(const std::vector<uint8_t>& data)
 {
-    return &m_read_buffer;
+    m_read_buffer.assign(data.begin(), data.end());
+}
+
+
+const std::vector<uint8_t>& RegisterManager::get_read_buffer()
+{
+    return m_read_buffer;
 
 } // end of "get_read_buffer"
 
 
-std::vector<uint8_t>* RegisterManager::get_write_buffer()
+std::vector<uint8_t>& RegisterManager::get_write_buffer()
 {
-    return &m_write_buffer;
+    return m_write_buffer;
 
 } // end of "get_write_buffer"
 
@@ -65,7 +71,7 @@ void RegisterManager::add_request(Request request)
 } // end of "add_request"
 
 
-void RegisterManager::add_request(uint8_t reg, int length, std::function<status_utils::StatusCode(std::vector<uint8_t>*)> runnable)
+void RegisterManager::add_request(uint8_t reg, int length, std::function<status_utils::StatusCode(std::vector<uint8_t>&)> runnable)
 {
     Request request = 
     {
@@ -87,7 +93,7 @@ void RegisterManager::add_command(Command command)
 } // end of "add_command"
 
 
-void RegisterManager::add_command(uint8_t reg, int length, std::function<status_utils::StatusCode(std::vector<uint8_t>*)> runnable)
+void RegisterManager::add_command(uint8_t reg, int length, std::function<status_utils::StatusCode(const std::vector<uint8_t>&)> runnable)
 {
     Command command = 
     {

@@ -25,7 +25,7 @@ struct Request
 
     // The function to send the data back to the host. The parameter is a pointer
     // to the buffer that will write back to the host
-    std::function<status_utils::StatusCode(std::vector<uint8_t>*)> m_runnable;
+    std::function<status_utils::StatusCode(std::vector<uint8_t>&)> m_runnable;
 
 
     /**

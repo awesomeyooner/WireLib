@@ -13,14 +13,14 @@ Command Command::make_double(uint8_t reg, double* value, std::function<void()> r
 
         // The runnable will take in the incoming data, convert it to a float,
         // set the pointer's float value equal to that value, and run the runnable
-        .m_runnable = [value, runnable](std::vector<uint8_t>* data) -> status_utils::StatusCode
+        .m_runnable = [value, runnable](const std::vector<uint8_t>& data) -> status_utils::StatusCode
         {
             // If the runnable isn't NULL, then run it
             if(runnable)
                 runnable();
 
             // Convert the incoming bytes into a float
-            float f_data = ByteConverter::bytes_to_double(*data);
+            float f_data = ByteConverter::bytes_to_double(data);
 
             // Set the pointer's value equal to the incoming float
             *value = f_data;
@@ -44,14 +44,14 @@ Command Command::make_float(uint8_t reg, float* value, std::function<void()> run
 
         // The runnable will take in the incoming data, convert it to a float,
         // set the pointer's float value equal to that value, and run the runnable
-        .m_runnable = [value, runnable](std::vector<uint8_t>* data) -> status_utils::StatusCode
+        .m_runnable = [value, runnable](const std::vector<uint8_t>& data) -> status_utils::StatusCode
         {
             // If the runnable isn't NULL, then run it
             if(runnable)
                 runnable();
 
             // Convert the incoming bytes into a float
-            float f_data = ByteConverter::bytes_to_float(*data);
+            float f_data = ByteConverter::bytes_to_float(data);
 
             // Set the pointer's value equal to the incoming float
             *value = f_data;
@@ -74,7 +74,7 @@ Command Command::make_runnable(uint8_t reg, std::function<void()> runnable)
         .m_length = 0,
         
         // Run the runnable and return OK
-        .m_runnable = [runnable](std::vector<uint8_t>* data) -> status_utils::StatusCode{
+        .m_runnable = [runnable](const std::vector<uint8_t>& data) -> status_utils::StatusCode{
             runnable();
             return status_utils::StatusCode::OK;
         }

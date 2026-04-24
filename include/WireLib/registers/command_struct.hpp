@@ -24,7 +24,7 @@ struct Command
 
     // The runnable that uses the incoming data. The parameter is the pointer to
     // the read buffer that contains the data read from the host
-    std::function<status_utils::StatusCode(std::vector<uint8_t>*)> m_runnable;
+    std::function<status_utils::StatusCode(const std::vector<uint8_t>&)> m_runnable;
 
 
     /**

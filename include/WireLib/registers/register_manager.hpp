@@ -32,7 +32,7 @@ class RegisterManager
          * @return `status_utils::StatusCode` FAILED if neither maps contain the associated register or
          * if the runnable inside the register fails. OK otherwise 
          */
-        static status_utils::StatusCode update(uint8_t reg, std::vector<uint8_t>* incoming_data);
+        static status_utils::StatusCode update(uint8_t reg, const std::vector<uint8_t>& incoming_data);
 
         /**
          * @brief Runs the register associated with the one defined in the read buffer and uses the data
@@ -44,18 +44,25 @@ class RegisterManager
         static status_utils::StatusCode update();
         
         /**
+         * @brief Assign the values of the read buffer
+         * 
+         * @param data `const std::vector<uint8_t>&` The new values 
+         */
+        static void set_read_buffer(const std::vector<uint8_t>& data);
+
+        /**
          * @brief Gets the pointer to the read buffer
          * 
          * @return `std::vector<uint8_t>*` The pointer to the read buffer 
          */
-        static std::vector<uint8_t>* get_read_buffer();
+        static const std::vector<uint8_t>& get_read_buffer();
 
         /**
          * @brief Gets the pointer to the write buffer
          * 
          * @return `std::vector<uint8_t>*` The pointer to the write buffer 
          */
-        static std::vector<uint8_t>* get_write_buffer();
+        static std::vector<uint8_t>& get_write_buffer();
 
         /**
          * @brief Add a request to the request map
@@ -71,7 +78,7 @@ class RegisterManager
          * @param length `int` The length of the data to send in bytes
          * @param runnable `std::function<status_utils::StatusCode()>` The runnable that will send the data
          */
-        static void add_request(uint8_t reg, int length, std::function<status_utils::StatusCode(std::vector<uint8_t>*)> runnable);
+        static void add_request(uint8_t reg, int length, std::function<status_utils::StatusCode(std::vector<uint8_t>&)> runnable);
 
         /**
          * @brief Add a command to the command map
@@ -88,7 +95,7 @@ class RegisterManager
          * @param runnable `std::function<status_utils::StatusCode(std::vector<uint8_t>*)>` The runnable that will use 
          * the recieved bytes
          */
-        static void add_command(uint8_t reg, int length, std::function<status_utils::StatusCode(std::vector<uint8_t>*)> runnable);
+        static void add_command(uint8_t reg, int length, std::function<status_utils::StatusCode(const std::vector<uint8_t>&)> runnable);
 
         /**
          * @brief Extracts only the register byte of the read buffer (the first element)

@@ -18,11 +18,8 @@ void WireManager::initialize(int address)
 
 StatusCode WireManager::on_receive(const std::vector<uint8_t>& bytes)
 {
-    // Shorthand for the read buffer
-    std::vector<uint8_t>* read_buffer = RegisterManager::get_read_buffer();
-
     // Copy the contents of the incoming bytes to RegisterManager's bytes
-    read_buffer->assign(bytes.begin(), bytes.end());
+    RegisterManager::set_read_buffer(bytes);
 
     // Update the registers using the incoming data
     return RegisterManager::update();
