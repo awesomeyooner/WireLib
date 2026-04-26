@@ -5,7 +5,7 @@ FloatsBytesConverter f_to_b; // float to bytes
 DoublesBytesConverter d_to_b; // double to bytes
 
 
-float ByteConverter::bytes_to_float(std::vector<uint8_t> v_bytes)
+float ByteConverter::bytes_to_float(const std::vector<uint8_t>& v_bytes)
 {
     // Copy the data from the vector into the union
     f_to_b.bytes[0] = v_bytes.at(0);
@@ -40,7 +40,7 @@ std::vector<uint8_t> ByteConverter::float_to_bytes(float value)
 } // end of "float_to_bytes"
 
 
-double ByteConverter::bytes_to_double(std::vector<uint8_t> v_bytes)
+double ByteConverter::bytes_to_double(const std::vector<uint8_t>& v_bytes)
 {
     // Copy the data from the vector into the union
     d_to_b.bytes[0] = v_bytes.at(0);

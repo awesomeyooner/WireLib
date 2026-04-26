@@ -18,7 +18,14 @@ enum class WireState
 {
     READY,  // The stack is ready to recieve a new packet 
     ONGOING,  // The stack is currently recieving packets and is waiting for the rest of the packets to arrive  
-    FINISHED  // The stack has recieved all of the needed packets
+    FINISHED // The stack has finished reading all packets and is ready to send the data out to be used
+};
+
+
+enum class ParseType
+{
+    RAW, // read buffer = raw data, no analyzing or anything
+    PACKET //  Parse the raw data as a packet
 };
 
 
@@ -29,10 +36,22 @@ enum class WireState
  */
 class CommunicationInterface
 {
-
     public:
 
+        // Which index is the register byte at
+        const int g_REGISTER_BYTE = 0;
+
+        // Which index is the length byte at
+        const int g_LENGTH_BYTE = 1;
+
+        // The default max packet size in bytes
+        const int g_DEFAULT_MAX_PACKET_SIZE = 256; // bytes
+
+
         CommunicationInterface() = default;
+
+        CommunicationInterface(int max_packet_size, ParseType parse_type = ParseType::PACKET);
+
         virtual ~CommunicationInterface() = default;
 
         /**
@@ -44,7 +63,39 @@ class CommunicationInterface
         virtual void configure_on_receive(std::function<status_utils::StatusCode(const std::vector<uint8_t>&)> callback);
 
         /**
-         * @brief The function to call when a packet is recieved from the backend implementation
+         * @brief Get the current read state of the device
+         * 
+         * @return `const WireState` The state of the read progress 
+         */
+        virtual const WireState get_read_state();
+
+        /**
+         * @brief Get the current write state of the device
+         * 
+         * @return `const WireState` The state of the write progress
+         */
+        virtual const WireState get_write_state();
+
+        /**
+         * @brief Gets the parse type of this stack, parsing as packets or just raw data
+         * 
+         * @return `const ParseType` The parse type. RAW means buffer = data, PACKET means
+         * the raw data is expected to follow the Packet format (in notes) 
+         */
+        virtual const ParseType get_parse_type();
+
+        /**
+         * @brief Sets the parse type of this comm.
+         * 
+         * @param parse_type `ParseType` The new parse type
+         * @return Returns `TRUE` if the old type did change. FALSE if it's already
+         * at that type
+         */
+        virtual bool set_parse_type(ParseType parse_type);
+
+        /**
+         * @brief The function to call when a packet is recieved from the backend implementation. This is the RAW receive function,
+         * the multi-packet parsing happens in handled in a different method but this method CALLS that method
          * 
          * @param buffer `uint8_t*` Dynamic byte array for the incoming data
          * @param length `uint32_t` The length of the array
@@ -64,11 +115,41 @@ class CommunicationInterface
     // Protected since we want all child classes to have access
     protected:
 
+        /**
+         * @brief Parses an incoming raw data packet to fill the read buffer with the proper data.
+         * This method handles multi-packet parsing
+         * 
+         * @param bytes `const std::vector<uint8_t>&` The byte buffer
+         * @return `status_utils::StatusCode` OK if successful. FAILED otherwise
+         */
+        virtual status_utils::StatusCode parse_packet(const std::vector<uint8_t>& bytes);
+
         // The function callback
         std::function<status_utils::StatusCode(const std::vector<uint8_t>&)> m_receive_callback;
 
         // The byte vector of all read data
         std::vector<uint8_t> m_read_buffer;
+
+        // The byte vector of all the write data
+        std::vector<uint8_t> m_write_buffer;
+
+        // The current read state of this device 
+        WireState m_read_state = WireState::READY;
+
+        // The current write state of this device
+        WireState m_write_state = WireState::READY;
+
+        // How this comm. parses data
+        ParseType m_parse_type = ParseType::RAW;
+
+        // The maximum amount of bytes per packet this protocol can handle
+        int m_max_packet_size = g_DEFAULT_MAX_PACKET_SIZE;
+
+        // The number of remaining bytes to read
+        int m_remaining_read_bytes = 0;
+
+        // The number of remaining bytes to write
+        int m_remaining_write_bytes = 0;
 
 
 }; // class CommunicationInterface

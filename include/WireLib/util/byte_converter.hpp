@@ -32,7 +32,7 @@ class ByteConverter
          * @param v_bytes `std::vector<uint8_t>` The vector of 4 bytes 
          * @return `float` The converted float value 
          */
-        static float bytes_to_float(std::vector<uint8_t> v_bytes);
+        static float bytes_to_float(const std::vector<uint8_t>& v_bytes);
 
         /**
          * @brief Converts a float into a vector of 4 bytes
@@ -49,7 +49,7 @@ class ByteConverter
          * @param v_bytes `std::vector<uint8_t>` The vector of 8 bytes 
          * @return `double` The converted double value 
          */
-        static double bytes_to_double(std::vector<uint8_t> v_bytes);
+        static double bytes_to_double(const std::vector<uint8_t>& v_bytes);
 
         /**
          * @brief Converts a double into a vector of 8 bytes
