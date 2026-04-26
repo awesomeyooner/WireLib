@@ -94,6 +94,22 @@ class CommunicationInterface
         virtual bool set_parse_type(ParseType parse_type);
 
         /**
+         * @brief Gets the maximum number of bytes this protocol can handle per packet
+         * 
+         * @return `const int` The max number in bytes 
+         */
+        virtual const int get_max_packet_size();
+
+        /**
+         * @brief Sets the max number of bytes per package. This returns whether or not this did anything
+         * 
+         * @param size `int` The number of bytes
+         * @return `true` If the previous max was different than the new one 
+         * @return `false` If the previous max is already the new one 
+         */
+        virtual bool set_max_packet_size(int size);
+
+        /**
          * @brief The function to call when a packet is recieved from the backend implementation. This is the RAW receive function,
          * the multi-packet parsing happens in handled in a different method but this method CALLS that method
          * 

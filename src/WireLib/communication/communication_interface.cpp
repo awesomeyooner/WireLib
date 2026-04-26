@@ -42,13 +42,31 @@ const ParseType CommunicationInterface::get_parse_type()
 
 bool CommunicationInterface::set_parse_type(ParseType parse_type)
 {
-    bool did_change = m_parse_type == parse_type;
+    bool did_change = m_parse_type != parse_type;
 
     m_parse_type = parse_type;
 
     return did_change;
 
 } // end of "set_parse_type(ParseType)"
+
+
+const int CommunicationInterface::get_max_packet_size()
+{
+    return m_max_packet_size;
+
+} // end of "get_max_packet_size()"
+
+
+bool CommunicationInterface::set_max_packet_size(int size)
+{
+    bool did_change = m_max_packet_size != size;
+
+    m_max_packet_size = size;
+
+    return did_change;
+
+} // end of "set_max_packet_size(int)"
 
 
 StatusCode CommunicationInterface::parse_packet(const std::vector<uint8_t>& bytes)
