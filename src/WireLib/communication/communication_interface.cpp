@@ -99,6 +99,9 @@ StatusCode CommunicationInterface::parse_packet(const std::vector<uint8_t>& byte
         case WireState::READY:
         case WireState::FINISHED:
             {
+                if(bytes.size() - 1 < g_LENGTH_BYTE)
+                    return StatusCode::FAILED;
+                    
                 int total_packet_length = bytes.at(g_LENGTH_BYTE);
 
                 // Fill the buffer since this is our FIRST packet

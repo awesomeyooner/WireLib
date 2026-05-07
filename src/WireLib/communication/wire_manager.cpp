@@ -35,6 +35,8 @@ StatusCode WireManager::on_request()
     //     Wire.write(byte);
     // }
 
+    return StatusCode::OK;
+    
 } // end of "on_request"
 
 
