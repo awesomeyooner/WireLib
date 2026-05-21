@@ -9,9 +9,9 @@ add_library(${PROJECT_NAME}
     src/communication/wire_manager.cpp
     src/communication/communication_interface.cpp
     src/communication/communication_api.cpp
-    
+
     src/registers/command_struct.cpp
-    # src/registers/register_manager.cpp
+    src/registers/register_manager.cpp
     src/registers/request_struct.cpp
 
     src/stm32/communication/protocols/serial_api.cpp
@@ -25,7 +25,9 @@ target_include_directories(${PROJECT_NAME}
 )
 
 target_link_libraries(${PROJECT_NAME}
-    PUBLIC EmbeddedLib
+    PUBLIC 
+        EmbeddedLib
+        ActionLib
 )
 
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
