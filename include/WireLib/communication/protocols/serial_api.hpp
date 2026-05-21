@@ -1,5 +1,3 @@
-#ifdef STM32CUBE
-
 #ifndef SERIAL_API_HPP
 #define SERIAL_API_HPP
 
@@ -34,5 +32,3 @@ extern "C" {
 
 
 #endif // SERIAL_API_HPP
-
-#endif // STM32CUBE

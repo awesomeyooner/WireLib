@@ -1,5 +1,3 @@
-#ifdef STM32CUBE
-
 #include "WireLib/communication/protocols/serial_interface.hpp"
 
 #include "usb_device.h"
@@ -118,6 +116,3 @@ StatusCode SerialInterface::error(double data)
 
 
 SerialInterface Serial;
-
-
-#endif // STM32CUBE
