@@ -6,16 +6,22 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # === Main Library ===
 add_library(${PROJECT_NAME}
+
+    # Wire Manager
     src/communication/wire_manager.cpp
+
+    # General Communication
     src/communication/communication_interface.cpp
     src/communication/communication_api.cpp
 
+    # Serial
+    src/communication/protocols/serial_api.cpp
+    src/communication/protocols/serial_interface.cpp
+
+    # Register Stuff
     src/registers/command_struct.cpp
     src/registers/register_manager.cpp
     src/registers/request_struct.cpp
-
-    src/stm32/communication/protocols/serial_api.cpp
-    src/stm32/communication/protocols/serial_interface.cpp
 )
 
 target_include_directories(${PROJECT_NAME}
