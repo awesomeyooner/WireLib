@@ -7,13 +7,15 @@ A PlatformIO based library that handles different types of wire communication, l
 
 To include this library, please `git clone` or `git submodule add` this repo into the `\lib` folder of your project
 
-You must also add `EmbeddedLib`!
+You must also add `EmbeddedLib` and `ActionLib`!
 
 Then add this to link the library
 
 ```cmake
+# Add User Libraries
 add_subdirectory(lib/EmbeddedLib)
 add_subdirectory(lib/WireLib)
+add_subdirectory(lib/ActionLib)
 
 add_library(shared_library INTERFACE)
 
@@ -36,6 +38,7 @@ target_compile_definitions(shared_library INTERFACE
 
 target_link_libraries(EmbeddedLib PRIVATE shared_library)
 target_link_libraries(WireLib PRIVATE shared_library)
+target_link_libraries(ActionLib PRIVATE shared_library)
 
 ...
 
@@ -46,6 +49,7 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
     # Add user defined libraries
     EmbeddedLib
     WireLib
+    ActionLib
 )
 ```
 
