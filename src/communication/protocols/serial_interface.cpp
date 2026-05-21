@@ -6,6 +6,7 @@
 
 
 using namespace status_utils;
+using namespace string_util;
 
 
 StatusCode SerialInterface::transmit_bytes(const std::vector<uint8_t>& bytes)
@@ -36,7 +37,7 @@ StatusCode SerialInterface::print(std::string text)
 StatusCode SerialInterface::print(double data)
 {
     // Convert data to string and send it over
-    return print(std::to_string(data));
+    return print(to_string(data));
 
 } // end of "print(double)"
 
@@ -52,7 +53,7 @@ StatusCode SerialInterface::println(std::string text)
 StatusCode SerialInterface::println(double data)
 {
     // Convert data to string and send it over
-    return println(std::to_string(data));
+    return println(to_string(data));
     
 } // end of println(double)
 
@@ -60,7 +61,7 @@ StatusCode SerialInterface::println(double data)
 StatusCode SerialInterface::print_header(std::string header, std::string text)
 {
     return println(
-        string_util::timestamped_header(header, text)
+        timestamped_header(header, text)
     );
 
 } // end of "print_header(std::string, std::string)"
@@ -68,7 +69,7 @@ StatusCode SerialInterface::print_header(std::string header, std::string text)
 
 StatusCode SerialInterface::print_header(std::string header, double data)
 {
-    return print_header(header, std::to_string(data));
+    return print_header(header, to_string(data));
 
 } // end of "print_header(std::string, std::string)"
 
@@ -82,7 +83,7 @@ StatusCode SerialInterface::info(std::string text)
 
 StatusCode SerialInterface::info(double data)
 {
-    return info(std::to_string(data));
+    return info(to_string(data));
 
 } // end of "info(double)"
 
@@ -96,7 +97,7 @@ StatusCode SerialInterface::debug(std::string text)
 
 StatusCode SerialInterface::debug(double data)
 {
-    return debug(std::to_string(data));
+    return debug(to_string(data));
 
 } // end of "debug(double)"
 
@@ -110,7 +111,7 @@ StatusCode SerialInterface::error(std::string text)
 
 StatusCode SerialInterface::error(double data)
 {
-    return error(std::to_string(data));
+    return error(to_string(data));
 
 } // end of "error(double)"
 
