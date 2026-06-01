@@ -16,13 +16,15 @@ extern "C" {
      * 
      * In File: `cube/USB_DEVICE/App/usbd_cdc_if.h`
      * 
-     * Add: `#include "EmbeddedLib/stm32/communication/usbfs_api.hpp"` at line 34
+     * Add: `#include "WireLib/communication/protocols/serial_api.hpp"` at line 34
      *
      * Add the actual API Call
      * 
      * In File: `cube/USB_DEVICE/App/usbd_cdc_if.c`
      * 
-     * Add: `USBFS_on_receive(uint8_t* buffer, uint32_t length)`
+     * Under: `static int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)`
+     * 
+     * Add: `Serial_on_receive(Buf, *Len);`
      */
     bool Serial_on_receive(uint8_t* buffer, uint32_t length);
 
