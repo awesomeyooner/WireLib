@@ -22,6 +22,8 @@ add_library(${PROJECT_NAME}
     src/registers/command_struct.cpp
     src/registers/register_manager.cpp
     src/registers/request_struct.cpp
+
+    src/util/byte_converter.cpp
 )
 
 target_include_directories(${PROJECT_NAME}
