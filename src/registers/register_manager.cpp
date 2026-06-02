@@ -117,7 +117,7 @@ uint8_t RegisterManager::extract_register()
 std::vector<uint8_t> RegisterManager::extract_data()
 {
     // Copy the read data to another buffer but skip the first one since it's the register
-    std::vector<uint8_t> data(m_read_buffer.begin() + 1, m_read_buffer.end());
+    std::vector<uint8_t> data(m_read_buffer.begin() + 2, m_read_buffer.end());
 
     // Remove the first element (the register byte)
     // data.erase(data.begin());
