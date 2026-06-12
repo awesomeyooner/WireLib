@@ -116,14 +116,12 @@ uint8_t RegisterManager::extract_register()
 
 std::vector<uint8_t> RegisterManager::extract_data()
 {
-    // Copy the read data to another buffer but skip the first one since it's the register
+    // Copy the read data to another buffer but skip the first two bytes 
+    // since it's the register and length of packet
     std::vector<uint8_t> data(m_read_buffer.begin() + 2, m_read_buffer.end());
 
-    // Remove the first element (the register byte)
-    // data.erase(data.begin());
-
-    // Return the buffer. It is the read buffer but without the first byte
-    // which is / should be the register byte
+    // Return the buffer. It is the read buffer but without the first two bytes
+    // which is / should be the register byte and length byte
     return data;
 
 } // end of "extract_data"
