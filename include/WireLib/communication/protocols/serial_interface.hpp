@@ -1,7 +1,7 @@
 #ifndef SERIAL_INTERFACE_HPP
 #define SERIAL_INTERFACE_HPP
 
-#include "EmbeddedLib/System.hpp"
+#include "EmbeddedLib/system.hpp"
 #include "EmbeddedLib/util/string_util.hpp"
 
 #include "WireLib/communication/communication_interface.hpp"
