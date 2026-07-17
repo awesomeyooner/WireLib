@@ -75,10 +75,12 @@ StatusCode CommunicationInterface::parse_packet(const std::vector<uint8_t>& byte
     // Then just assign all of the read buffer to the incoming bytes
     if(m_parse_type == ParseType::RAW)
     {
-
+        // Populate the read buffer
         m_read_buffer.assign(bytes.begin(), bytes.end());
         m_remaining_read_bytes = 0;
-        m_read_state = WireState::READY;
+
+        // We are finished, so we can call the callback
+        m_read_state = WireState::FINISHED;
 
         return StatusCode::OK;
     }
@@ -167,7 +169,7 @@ StatusCode CommunicationInterface::on_receive(uint8_t* buffer, int length)
 {
     // Convert dyn. arr. to vector
     std::vector<uint8_t> bytes;
-    bytes.assign(buffer, buffer + length);
+    bytes.assign(buffer, buffer + length);   
 
     // Parse bytes to handle multi-packet requests
     StatusCode packet_status = parse_packet(bytes);
