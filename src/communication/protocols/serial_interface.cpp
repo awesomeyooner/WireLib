@@ -6,7 +6,7 @@
 
 
 using namespace status_utils;
-using namespace string_util;
+using namespace string_formatter;
 
 
 StatusCode SerialInterface::transmit_bytes(const std::vector<uint8_t>& bytes)
