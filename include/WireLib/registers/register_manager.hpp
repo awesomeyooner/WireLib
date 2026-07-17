@@ -9,7 +9,7 @@
 
 #include "WireLib/util/byte_converter.hpp"
 
-#include "EmbeddedLib/util/status.hpp"
+#include "EmbeddedLib/status.hpp"
 
 
 class RegisterManager

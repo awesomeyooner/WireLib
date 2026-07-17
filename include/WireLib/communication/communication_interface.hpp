@@ -8,7 +8,7 @@
 #include <functional>
 #include <cstdint>
 
-#include "EmbeddedLib/util/status.hpp"
+#include "EmbeddedLib/status.hpp"
 
 
 /**
