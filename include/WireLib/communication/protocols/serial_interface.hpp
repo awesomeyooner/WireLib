@@ -2,7 +2,7 @@
 #define SERIAL_INTERFACE_HPP
 
 #include "EmbeddedLib/system.hpp"
-#include "EmbeddedLib/util/string_util.hpp"
+#include "EmbeddedLib/util/string_formatter.hpp"
 
 #include "WireLib/communication/communication_interface.hpp"
 

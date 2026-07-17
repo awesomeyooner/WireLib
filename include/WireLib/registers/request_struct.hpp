@@ -4,7 +4,7 @@
 #include <cstdint>
 #include <functional>
 
-#include "EmbeddedLib/util/status.hpp"
+#include "EmbeddedLib/status.hpp"
 
 #include "WireLib/util/byte_converter.hpp"
 
