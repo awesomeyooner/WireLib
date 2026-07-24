@@ -17,7 +17,7 @@ Then add the actual call
 // cube/USB_DEVICE/App/usbd_cdc_if.c
 
 // Line 266
-Serial_on_receive(Buf, Len);
+Serial_on_receive(Buf, *Len);
 // Add it at the end, right before the return statement
 ```
 
