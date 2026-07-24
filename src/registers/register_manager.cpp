@@ -35,6 +35,12 @@ status_utils::StatusCode RegisterManager::update(uint8_t reg, const std::vector<
 
 status_utils::StatusCode RegisterManager::update()
 {
+    // 0 - Register
+    // 1 - Length
+    // 2... - Data
+    if(m_read_buffer.size() < 2)
+        return status_utils::StatusCode::FAILED;
+
     uint8_t reg = extract_register();
     std::vector<uint8_t> data = extract_data();
 
