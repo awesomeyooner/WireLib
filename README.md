@@ -12,46 +12,28 @@ You must also add `EmbeddedLib` and `ActionLib`!
 Then add this to link the library
 
 ```cmake
-# Add User Libraries
-add_subdirectory(lib/EmbeddedLib)
+# Add WireLib
 add_subdirectory(lib/WireLib)
-add_subdirectory(lib/ActionLib)
-
-add_library(shared_library INTERFACE)
-
-target_include_directories(shared_library INTERFACE
-    ${CMAKE_SOURCE_DIR}/Core/Inc
-    ${CMAKE_SOURCE_DIR}/USB_DEVICE/App
-    ${CMAKE_SOURCE_DIR}/USB_DEVICE/Target
-    ${CMAKE_SOURCE_DIR}/Drivers/STM32F4xx_HAL_Driver/Inc
-    ${CMAKE_SOURCE_DIR}/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy
-    ${CMAKE_SOURCE_DIR}/Middlewares/ST/STM32_USB_Device_Library/Core/Inc
-    ${CMAKE_SOURCE_DIR}/Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc
-    ${CMAKE_SOURCE_DIR}/Drivers/CMSIS/Device/ST/STM32F4xx/Include
-    ${CMAKE_SOURCE_DIR}/Drivers/CMSIS/Include
-)
-
-target_compile_definitions(shared_library INTERFACE
-    STM32CUBE
-    STM32F446xx
-)
-
-target_link_libraries(EmbeddedLib PRIVATE shared_library)
 target_link_libraries(WireLib PRIVATE shared_library)
-target_link_libraries(ActionLib PRIVATE shared_library)
-
-...
 
 # Add linked libraries
 target_link_libraries(${CMAKE_PROJECT_NAME}
-    stm32cubemx
+    shared_library # Main Library Interface
 
-    # Add user defined libraries
-    EmbeddedLib
     WireLib
-    ActionLib
+    # Other Libs
 )
 ```
+
+## Usage
+
+Here's a list of implemented protocols
+
+Each one links to their respective setup guides
+
+- [`Serial`](include/WireLib/communication/protocols/HowTo.md)
+- `CAN` (Planned)
+- `I2C` (Planned)
 
 ## Implementation
 
