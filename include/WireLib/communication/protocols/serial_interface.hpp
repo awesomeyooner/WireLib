@@ -36,9 +36,10 @@ class SerialInterface : public CommunicationInterface
          * @brief Send a double over USB / Serial
          * 
          * @param data `double` The double to send
+         * @param decimals `int = 3` The number of decimals to print. Only goes up to `9`
          * @return `status_utils::StatusCode` `OK` if transmit was successful. `FAILED` otherwise
          */
-        status_utils::StatusCode print(double data);
+        status_utils::StatusCode print(double data, int decimals = 3);
 
         /**
          * @brief Send a string over USB / Serial with CRLF
@@ -52,9 +53,10 @@ class SerialInterface : public CommunicationInterface
          * @brief Send a double over USB / Serial with CRLF
          * 
          * @param data `double` The double to send
+         * @param decimals `int = 3` The number of decimals to print. Only goes up to `9`
          * @return `status_utils::StatusCode` `OK` if transmit was successful. `FAILED` otherwise
          */
-        status_utils::StatusCode println(double data);
+        status_utils::StatusCode println(double data, int decimals = 3);
 
         /**
          * @brief Send a string over USB / Serial with a timestamped header and CRLF
@@ -70,9 +72,10 @@ class SerialInterface : public CommunicationInterface
          * 
          * @param header `std::string` The header to use
          * @param data `double` The double to send
+         * @param decimals `int = 3` The number of decimals to print. Only goes up to `9`
          * @return `status_utils::StatusCode` `OK` if transmit was successful. `FAILED` otherwise
          */
-        status_utils::StatusCode print_header(std::string header, double data);
+        status_utils::StatusCode print_header(std::string header, double data, int decimals = 3);
 
         /**
          * @brief Send a string over USB / Serial with a timestamped header of INFO and CRLF
@@ -86,9 +89,10 @@ class SerialInterface : public CommunicationInterface
          * @brief Send a double over USB / Serial with a timestamped header of INFO and CRLF
          * 
          * @param data `double` The double to send
+         * @param decimals `int = 3` The number of decimals to print. Only goes up to `9`
          * @return `status_utils::StatusCode` `OK` if transmit was successful. `FAILED` otherwise
          */
-        status_utils::StatusCode info(double data);
+        status_utils::StatusCode info(double data, int decimals = 3);
 
         /**
          * @brief Send a string over USB / Serial with a timestamped header of DEBUG and CRLF
@@ -102,9 +106,10 @@ class SerialInterface : public CommunicationInterface
          * @brief Send a double over USB / Serial with a timestamped header of DEBUG and CRLF
          * 
          * @param data `double` The double to send
+         * @param decimals `int = 3` The number of decimals to print. Only goes up to `9`
          * @return `status_utils::StatusCode` `OK` if transmit was successful. `FAILED` otherwise
          */
-        status_utils::StatusCode debug(double data);
+        status_utils::StatusCode debug(double data, int decimals = 3);
 
         /**
          * @brief Send a string over USB / Serial with a timestamped header of ERROR and CRLF
@@ -118,9 +123,10 @@ class SerialInterface : public CommunicationInterface
          * @brief Send a double over USB / Serial with a timestamped header of DEBUG and CRLF
          * 
          * @param data `double` The double to send
+         * @param decimals `int = 3` The number of decimals to print. Only goes up to `9`
          * @return `status_utils::StatusCode` `OK` if transmit was successful. `FAILED` otherwise
          */
-        status_utils::StatusCode error(double data);
+        status_utils::StatusCode error(double data, int decimals = 3);
 
 }; // class Serial
 

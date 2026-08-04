@@ -34,10 +34,10 @@ StatusCode SerialInterface::print(std::string text)
 } // end of "print(std::string)"
 
 
-StatusCode SerialInterface::print(double data)
+StatusCode SerialInterface::print(double data, int decimals)
 {
     // Convert data to string and send it over
-    return print(to_string(data));
+    return print(to_string(data, decimals));
 
 } // end of "print(double)"
 
@@ -50,12 +50,12 @@ StatusCode SerialInterface::println(std::string text)
 } // end of println(std::string)
 
 
-StatusCode SerialInterface::println(double data)
+StatusCode SerialInterface::println(double data, int decimals)
 {
     // Convert data to string and send it over
-    return println(to_string(data));
+    return println(to_string(data, decimals));
     
-} // end of println(double)
+} // end of println(double, int)
 
 
 StatusCode SerialInterface::print_header(std::string header, std::string text)
@@ -67,11 +67,11 @@ StatusCode SerialInterface::print_header(std::string header, std::string text)
 } // end of "print_header(std::string, std::string)"
 
 
-StatusCode SerialInterface::print_header(std::string header, double data)
+StatusCode SerialInterface::print_header(std::string header, double data, int decimals)
 {
-    return print_header(header, to_string(data));
+    return print_header(header, to_string(data, decimals));
 
-} // end of "print_header(std::string, std::string)"
+} // end of "print_header(std::string, std::string, int)"
 
 
 StatusCode SerialInterface::info(std::string text)
@@ -81,11 +81,11 @@ StatusCode SerialInterface::info(std::string text)
 } // end of "info(std::string)"
 
 
-StatusCode SerialInterface::info(double data)
+StatusCode SerialInterface::info(double data, int decimals)
 {
-    return info(to_string(data));
+    return info(to_string(data, decimals));
 
-} // end of "info(double)"
+} // end of "info(double, int)"
 
 
 StatusCode SerialInterface::debug(std::string text)
@@ -95,11 +95,11 @@ StatusCode SerialInterface::debug(std::string text)
 } // end of "debug(std::string)"
 
 
-StatusCode SerialInterface::debug(double data)
+StatusCode SerialInterface::debug(double data, int decimals)
 {
-    return debug(to_string(data));
+    return debug(to_string(data, decimals));
 
-} // end of "debug(double)"
+} // end of "debug(double, int)"
 
 
 StatusCode SerialInterface::error(std::string text)
@@ -109,11 +109,11 @@ StatusCode SerialInterface::error(std::string text)
 } // end of "error(std::string)"
 
 
-StatusCode SerialInterface::error(double data)
+StatusCode SerialInterface::error(double data, int decimals)
 {
-    return error(to_string(data));
+    return error(to_string(data, decimals));
 
-} // end of "error(double)"
+} // end of "error(double, int)"
 
 
 SerialInterface Serial;
