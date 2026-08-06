@@ -4,10 +4,19 @@
 using namespace status_utils;
 
 
+CommunicationInterface::CommunicationInterface()
+{
+    m_write_buffer.resize(g_DEFAULT_WRITE_BUFFER_SIZE);
+
+} // end of "CommunicationInterface()"
+
+
 CommunicationInterface::CommunicationInterface(int max_packet_size, ParseType parse_type)
 {
     m_max_packet_size = max_packet_size;
     m_parse_type = parse_type;
+
+    m_write_buffer.resize(g_DEFAULT_WRITE_BUFFER_SIZE);
 
 } // end of "CommunicationInterface"
 
@@ -188,3 +197,14 @@ StatusCode CommunicationInterface::on_receive(uint8_t* buffer, int length)
     return packet_status;
 
 } // end of "on_receive(uint8_t*, int)"
+
+
+void CommunicationInterface::copy_to_write_buffer(const std::vector<uint8_t>& bytes)
+{
+    std::copy(
+        bytes.begin(),
+        bytes.begin() + std::min(m_write_buffer.size(), bytes.size()),
+        m_write_buffer.begin()
+    );
+
+} // end of "copy_to_write_buffer(const std::vector<uint8_t>&)"

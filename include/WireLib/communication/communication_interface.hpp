@@ -48,8 +48,10 @@ class CommunicationInterface
         // The default max packet size in bytes
         const int g_DEFAULT_MAX_PACKET_SIZE = 256; // bytes
 
+        // The default size of the write buffer
+        const int g_DEFAULT_WRITE_BUFFER_SIZE = 32; // bytes;
 
-        CommunicationInterface() = default;
+        CommunicationInterface();
 
         CommunicationInterface(int max_packet_size, ParseType parse_type = ParseType::PACKET);
 
@@ -140,6 +142,14 @@ class CommunicationInterface
          * @return `status_utils::StatusCode` OK if successful. FAILED otherwise
          */
         virtual status_utils::StatusCode parse_packet(const std::vector<uint8_t>& bytes);
+
+        /**
+         * @brief Copies the given vector of bytes into the internal write buffer. This is used
+         * so that the pointer to the write data has a static location
+         * 
+         * @param bytes `const std::vector<uint8_t>& bytes
+         */
+        virtual void copy_to_write_buffer(const std::vector<uint8_t>& bytes);
 
         // The function callback
         std::function<status_utils::StatusCode(const std::vector<uint8_t>&)> m_receive_callback;

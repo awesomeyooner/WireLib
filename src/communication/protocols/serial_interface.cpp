@@ -11,10 +11,16 @@ using namespace string_formatter;
 
 StatusCode SerialInterface::transmit_bytes(const std::vector<uint8_t>& bytes)
 {
+    // Copy the data to the buffer
+    copy_to_write_buffer(bytes);
+
     // Transmit via USB FS
     uint8_t transmit_status = CDC_Transmit_FS(
-        const_cast<uint8_t*>(bytes.data()), bytes.size()
+        const_cast<uint8_t*>(m_write_buffer.data()), bytes.size()
     );
+    // USBD_OK
+    // USBD_FAIL
+    // USBD_BUSY
 
     // If OK return OK
     return transmit_status == USBD_OK ? StatusCode::OK : StatusCode::FAILED;
@@ -116,4 +122,4 @@ StatusCode SerialInterface::error(double data, int decimals)
 } // end of "error(double, int)"
 
 
-SerialInterface Serial;
+SerialInterface Serial = SerialInterface();
