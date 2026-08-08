@@ -31,7 +31,7 @@ Here's a list of implemented protocols
 
 Each one links to their respective setup guides
 
-- [`Serial`](include/WireLib/communication/protocols/HowTo.md)
+- [`Serial`](include/WireLib/communication/protocols/README.md)
 - `CAN` (Planned)
 - `I2C` (Planned)
 
