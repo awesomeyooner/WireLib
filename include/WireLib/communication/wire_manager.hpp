@@ -28,7 +28,7 @@ class WireManager
 
     private:
 
-        static CommunicationInterface* m_interface;
+        static inline CommunicationInterface* m_interface = nullptr;
 
 
 }; // class WireManager

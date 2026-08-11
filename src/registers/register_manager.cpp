@@ -34,7 +34,7 @@ status_utils::StatusCode RegisterManager::update(uint8_t reg, const std::vector<
         }
         else if(holds_alternative<Request<float>>(m_request_map.at(reg)))
         {
-            auto request = std::get<Request<int>>(m_request_map.at(reg));
+            auto request = std::get<Request<float>>(m_request_map.at(reg));
 
             auto request_call = request.get_bytes();
 

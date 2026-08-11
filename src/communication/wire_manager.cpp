@@ -17,8 +17,17 @@ StatusCode WireManager::on_receive(const std::vector<uint8_t>& bytes)
     if(update_status != StatusCode::OK)
         return update_status;
 
+    if(m_interface == nullptr)
+        return StatusCode::FAILED;
+
     // Transmit any bytes that need to be sent
-    return m_interface->transmit_bytes(RegisterManager::get_write_buffer());
+    StatusCode transmit_status = m_interface->transmit_bytes(RegisterManager::get_write_buffer());
+
+    // Clear the buffer to prepare for other writes
+    // This is safe because `transmit_bytes` copies the values, it doesn't use a pointer to the argument
+    RegisterManager::clear_write_buffer();
+
+    return transmit_status;
 
 } // end of "on_recieve"
 
