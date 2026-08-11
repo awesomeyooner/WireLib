@@ -6,7 +6,7 @@
 std::vector<uint8_t> RegisterManager::m_read_buffer;
 std::vector<uint8_t> RegisterManager::m_write_buffer;
 
-std::unordered_map<uint8_t, Request> RegisterManager::m_request_map;
+std::unordered_map<uint8_t, RequestVariant> RegisterManager::m_request_map;
 std::unordered_map<uint8_t, Command> RegisterManager::m_command_map;
 
 
@@ -18,8 +18,46 @@ status_utils::StatusCode RegisterManager::update(uint8_t reg, const std::vector<
 
     // If the register exists, call its runnable
     if(m_request_map.find(reg) != m_request_map.end()){
-        // Serial.println("Request Map Called");
-        return m_request_map.at(reg).m_runnable(m_write_buffer);
+        
+        if(holds_alternative<Request<double>>(m_request_map.at(reg)))
+        {
+            auto request = std::get<Request<double>>(m_request_map.at(reg));
+
+            auto request_call = request.get_bytes();
+
+            if(!request_call.is_OK())
+                return request_call.status;
+            
+            set_write_buffer(request_call.value);
+
+            return StatusCode::OK;
+        }
+        else if(holds_alternative<Request<float>>(m_request_map.at(reg)))
+        {
+            auto request = std::get<Request<int>>(m_request_map.at(reg));
+
+            auto request_call = request.get_bytes();
+
+            if(!request_call.is_OK())
+                return request_call.status;
+            
+            set_write_buffer(request_call.value);
+
+            return StatusCode::OK;
+        }
+        else if(holds_alternative<Request<int>>(m_request_map.at(reg)))
+        {
+            auto request = std::get<Request<int>>(m_request_map.at(reg));
+
+            auto request_call = request.get_bytes();
+
+            if(!request_call.is_OK())
+                return request_call.status;
+            
+            set_write_buffer(request_call.value);
+
+            return StatusCode::OK;
+        }
     }
     
     // If the register exists, call its runnable
@@ -52,7 +90,8 @@ status_utils::StatusCode RegisterManager::update()
 void RegisterManager::set_read_buffer(const std::vector<uint8_t>& data)
 {
     m_read_buffer.assign(data.begin(), data.end());
-}
+
+} // end of "set_read_buffer(const std::vector<uint8_t>&)"
 
 
 const std::vector<uint8_t>& RegisterManager::get_read_buffer()
@@ -62,6 +101,20 @@ const std::vector<uint8_t>& RegisterManager::get_read_buffer()
 } // end of "get_read_buffer"
 
 
+void RegisterManager::clear_read_buffer()
+{
+    m_read_buffer.clear();
+
+} // end of "clear_read_buffer()"
+
+
+void RegisterManager::set_write_buffer(const std::vector<uint8_t>& data)
+{
+    m_write_buffer.assign(data.begin(), data.end());
+
+} // end of "set_read_buffer(const std::vector<uint8_t>&)"
+
+
 std::vector<uint8_t>& RegisterManager::get_write_buffer()
 {
     return m_write_buffer;
@@ -69,26 +122,11 @@ std::vector<uint8_t>& RegisterManager::get_write_buffer()
 } // end of "get_write_buffer"
 
 
-void RegisterManager::add_request(Request request)
+void RegisterManager::clear_write_buffer()
 {
-    // register, request
-    m_request_map.insert({request.m_reg, request});
+    m_write_buffer.clear();
 
-} // end of "add_request"
-
-
-void RegisterManager::add_request(uint8_t reg, int length, std::function<status_utils::StatusCode(std::vector<uint8_t>&)> runnable)
-{
-    Request request = 
-    {
-        .m_reg = reg,
-        .m_length = length,
-        .m_runnable = runnable
-    };
-
-    add_request(request);
-
-} // end of "add_request"
+} // end of "clear_write_buffer()"
 
 
 void RegisterManager::add_command(Command command)

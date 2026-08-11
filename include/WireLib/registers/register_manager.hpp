@@ -3,13 +3,17 @@
 
 #include <map>
 #include <unordered_map>
+#include <variant>
 
 #include "WireLib/registers/command_struct.hpp"
-#include "WireLib/registers/request_struct.hpp"
+#include "WireLib/registers/request.hpp"
 
 #include "WireLib/util/byte_converter.hpp"
 
 #include "EmbeddedLib/status.hpp"
+
+
+using RequestVariant = std::variant<Request<int>, Request<float>, Request<double>>;
 
 
 class RegisterManager
@@ -53,32 +57,43 @@ class RegisterManager
         /**
          * @brief Gets the pointer to the read buffer
          * 
-         * @return `std::vector<uint8_t>*` The pointer to the read buffer 
+         * @return `std::vector<uint8_t>&` 
          */
         static const std::vector<uint8_t>& get_read_buffer();
 
         /**
+         * @brief Clears the read buffer
+         * 
+         */
+        static void clear_read_buffer();
+
+        /**
+         * @brief Assign the values of the write buffer
+         * 
+         * @param data `const std::vector<uint8_t>&` The new values 
+         */
+        static void set_write_buffer(const std::vector<uint8_t>& data);
+
+        /**
          * @brief Gets the pointer to the write buffer
          * 
-         * @return `std::vector<uint8_t>*` The pointer to the write buffer 
+         * @return `std::vector<uint8_t>&` 
          */
         static std::vector<uint8_t>& get_write_buffer();
+
+        /**
+         * @brief Clears the write buffer
+         * 
+         */
+        static void clear_write_buffer();
 
         /**
          * @brief Add a request to the request map
          * 
          * @param request `Request` The request to add
          */
-        static void add_request(Request request);
-
-        /**
-         * @brief Add a request to the request map
-         * 
-         * @param reg `uint8_t` The register
-         * @param length `int` The length of the data to send in bytes
-         * @param runnable `std::function<status_utils::StatusCode()>` The runnable that will send the data
-         */
-        static void add_request(uint8_t reg, int length, std::function<status_utils::StatusCode(std::vector<uint8_t>&)> runnable);
+        template <typename T>
+        static void add_request(Request<T> request);
 
         /**
          * @brief Add a command to the command map
@@ -114,9 +129,14 @@ class RegisterManager
     private:
 
         // Maps to get the request / command associated with a register (uint8_t)
-        static std::unordered_map<uint8_t, Request> m_request_map;
+        static std::unordered_map<uint8_t, RequestVariant> m_request_map;
         static std::unordered_map<uint8_t, Command> m_command_map;
         
 }; // class RegisterManager
+
+
+// Include implementation file for template methods
+#include "WireLib/registers/register_manager.tpp"
+
 
 #endif // REGISTER_MANAGER_HPP

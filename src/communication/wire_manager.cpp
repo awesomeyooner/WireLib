@@ -4,40 +4,23 @@
 using namespace status_utils;
 
 
-void WireManager::initialize(int address)
-{
-    // Start the I2C interface with the given address
-    // Wire.begin(address);
-
-    // Link the on recieve and request functions
-    // Wire.onReceive(on_recieve);
-    // Wire.onRequest(on_request);
-
-} // end of "initialize"
-
-
 StatusCode WireManager::on_receive(const std::vector<uint8_t>& bytes)
 {
     // Copy the contents of the incoming bytes to RegisterManager's bytes
     RegisterManager::set_read_buffer(bytes);
 
     // Update the registers using the incoming data
-    return RegisterManager::update();
+    StatusCode update_status = RegisterManager::update();
+
+    // If update isn't OK 
+    // Then return early
+    if(update_status != StatusCode::OK)
+        return update_status;
+
+    // Transmit any bytes that need to be sent
+    return m_interface->transmit_bytes(RegisterManager::get_write_buffer());
 
 } // end of "on_recieve"
-
-
-StatusCode WireManager::on_request()
-{
-    // Write every byte in the buffer
-    // for(uint8_t byte : *RegisterManager::get_write_buffer())
-    // {
-    //     Wire.write(byte);
-    // }
-
-    return StatusCode::OK;
-    
-} // end of "on_request"
 
 
 void WireManager::attach(CommunicationInterface& interface)
@@ -49,4 +32,7 @@ void WireManager::attach(CommunicationInterface& interface)
             return WireManager::on_receive(bytes);
         }
     );
-}
+
+    m_interface = &interface;
+     
+} // end of "attach(CommunicationInterface&)"

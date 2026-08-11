@@ -21,7 +21,7 @@ add_library(${PROJECT_NAME}
     # Register Stuff
     src/registers/command_struct.cpp
     src/registers/register_manager.cpp
-    src/registers/request_struct.cpp
+    src/registers/request.cpp
 
     src/util/byte_converter.cpp
 )
