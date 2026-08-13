@@ -18,31 +18,73 @@ template<typename T>
 class Command
 {
 
-    // If T is specifically void, then make the runnable
-    // accept no arguments (you can have function<StatusCode(void)>)
-    using RunnableType = std::conditional_t<
-        std::is_void_v<T>,
-        std::function<status_utils::StatusCode()>,
-        std::function<status_utils::StatusCode(T)>
-    >;
-
     public:
 
-        Command(uint32_t reg, std::function<status_utils::StatusCode(T)> runnable);
+        /**
+         * @brief Create a new command at the given register and runnable action
+         * 
+         * Example: Print the a number sent to the MCU
+         * 
+         * ```
+         * Command<double>(101,
+         *  [](double data) -> StatusCode
+         *  {
+         *      Serial.println(data);
+         *  
+         *      return StatusCode::OK;
+         *  }
+         * );
+         * ```
+         * 
+         * @param reg `uint8_t` The register to use
+         * @param runnable `std::function<status_utils::StatusCode()` A function that returns a StatusCode that takes in
+         * a parameter of type T
+         */
+        Command(uint8_t reg, std::function<status_utils::StatusCode(T)> runnable);
 
-        // Command(uint32_t reg, std::function<status_utils::StatusCode()> runnable);
+        /**
+         * @brief Create a new command at the given register and runnable action that doesn't use the data given.
+         * This is typically used for debugging.
+         * Example: Print the a number sent to the MCU
+         * 
+         * ```
+         * Command<double>(101,
+         *  []() -> StatusCode
+         *  {
+         *      Serial.println("Testing!!!");
+         *  
+         *      return StatusCode::OK;
+         *  }
+         * );
+         * ```
+         * 
+         * @param reg `uint8_t` The register to use
+         * @param runnable `std::function<status_utils::StatusCode()` A function that returns a StatusCode without
+         * any parameters
+         */
+        Command(uint8_t reg, std::function<status_utils::StatusCode()> runnable);
 
-        Command(uint32_t reg, std::function<void(T)> runnable);
-
-        Command(uint32_t reg, std::function<void()> runnable);
-
+        /**
+         * @brief Get the register this Command is associated with
+         * 
+         * @return `uint8_t` 
+         */
         uint8_t get_register();
 
+        /**
+         * @brief Get the length of the data type this command accepts in bytes
+         * 
+         * @return `int` 
+         */
         int get_length();
 
+        /**
+         * @brief Run the internal runnable with the given argument
+         * 
+         * @param data `T`
+         * @return `status_utils::StatusCode` 
+         */
         status_utils::StatusCode run(T data);
-
-        status_utils::StatusCode run();
 
     private:
 
@@ -54,9 +96,10 @@ class Command
 
         // The runnable that uses the incoming data. The parameter is the datatype
         // sent from the host
-        RunnableType m_runnable;
+        std::function<status_utils::StatusCode(T)> m_runnable;
 
-}; // struct Command
+
+}; // class Command
 
 
 // Include implementation file for template methods

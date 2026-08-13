@@ -12,6 +12,6 @@ void RegisterManager::add_request(Request<T> request)
 template <typename T>
 void RegisterManager::add_command(Command<T> command)
 {
-    m_command_map.insert({command.m_reg, command});
+    m_command_map.insert({command.get_register(), command});
 
 } // end of "add_command(Command<T>)"

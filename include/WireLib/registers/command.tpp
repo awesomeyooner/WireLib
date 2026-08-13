@@ -6,7 +6,7 @@ using namespace status_utils;
 
 
 template <typename T>
-Command<T>::Command(uint32_t reg, function<StatusCode(T)> runnable)
+Command<T>::Command(uint8_t reg, function<StatusCode(T)> runnable)
 {
     m_reg = reg;
 
@@ -21,27 +21,24 @@ Command<T>::Command(uint32_t reg, function<StatusCode(T)> runnable)
 } // end of "Command(uint32_t, function<StatusCode(T)>)"
 
 
-// template <typename T>
-// Command<T>::Command(uint32_t reg, function<StatusCode()> runnable)
-//     // : Command(reg, [runnable](){runnable(); return StatusCode::OK;})
-// {
-//     m_reg = reg;
+template <typename T>
+Command<T>::Command(uint8_t reg, function<StatusCode()> runnable)
+{
+    m_reg = reg;
    
-//     // If the type is void
-//     if constexpr (std::is_void_v<T>)
-//         m_length = 0;
-//     else
-//         m_length = sizeof(T);
+    // If the type is void
+    if constexpr (std::is_void_v<T>)
+        m_length = 0;
+    else
+        m_length = sizeof(T);
 
-//     // Wrap the runnable to return a StatusCode
-//     m_runnable = [runnable]()
-//     {
-//         runnable();
+    // Wrap the runnable to not accept anything
+    m_runnable = [runnable]()
+    {
+        return runnable();
+    };
 
-//         return StatusCode::OK;
-//     };
-
-// } // end of "Command(uint32_t, function<StatusCode()>)"
+} // end of "Command(uint32_t, function<StatusCode()>)"
 
 
 template <typename T>

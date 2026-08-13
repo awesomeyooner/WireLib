@@ -83,10 +83,6 @@ status_utils::StatusCode RegisterManager::update(uint8_t reg, const std::vector<
 
             return std::get<Command<int>>(command).run(data);
         }
-        else if(holds_alternative<Command<void>>(command))
-        {
-            return std::get<Command<void>>(command).run(0);
-        }
     }
 
     return status_utils::StatusCode::FAILED;

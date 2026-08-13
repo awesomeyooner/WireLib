@@ -13,7 +13,7 @@
 #include "EmbeddedLib/status.hpp"
 
 
-using CommandVariant = std::variant<Command<int>, Command<float>, Command<double>, Command<void>>;
+using CommandVariant = std::variant<Command<int>, Command<float>, Command<double>>;
 using RequestVariant = std::variant<Request<int>, Request<float>, Request<double>>;
 
 
