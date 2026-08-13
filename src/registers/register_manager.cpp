@@ -67,21 +67,21 @@ status_utils::StatusCode RegisterManager::update(uint8_t reg, const std::vector<
         // Double
         if(holds_alternative<Command<double>>(command))
         {
-            double data = ByteConverter::bytes_to_double(incoming_data);
+            double data = ByteConverter::from_bytes<double>(incoming_data);
 
             return std::get<Command<double>>(command).run(data);
         }
         // Float
         else if(holds_alternative<Command<float>>(command))
         {
-            float data = ByteConverter::bytes_to_float(incoming_data);
+            float data = ByteConverter::from_bytes<float>(incoming_data);
 
             return std::get<Command<float>>(command).run(data);
         }
         // Int
         else if(holds_alternative<Command<int>>(command))
         {
-            int data = ByteConverter::bytes_to_int(incoming_data);
+            int data = ByteConverter::from_bytes<int>(incoming_data);
 
             return std::get<Command<int>>(command).run(data);
         }

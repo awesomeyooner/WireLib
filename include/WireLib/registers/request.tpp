@@ -38,15 +38,9 @@ StatusedValue<vector<uint8_t>> Request<T>::get_bytes()
     StatusCode status = runnable_status.status;
     T value = runnable_status.value;
 
-
-    // Explicilty check the data type to return
-    if constexpr (std::is_same_v<T, double>)
-        return StatusedValue<vector<uint8_t>>(ByteConverter::double_to_bytes(value), status);
-    else if constexpr (std::is_same_v<T, float>)
-        return StatusedValue<vector<uint8_t>>(ByteConverter::float_to_bytes(value), status);
-    else if constexpr (std::is_same_v<T, int>)
-        return StatusedValue<vector<uint8_t>>(ByteConverter::int_to_bytes(value), status);
-    else
-        return StatusedValue<vector<uint8_t>>({}, StatusCode::FAILED);
+    return StatusedValue<vector<uint8_t>>(
+        ByteConverter::to_bytes<T>(value),
+        status
+    );
 
 } // end of "get_bytes()"
