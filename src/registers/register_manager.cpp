@@ -7,7 +7,7 @@ std::vector<uint8_t> RegisterManager::m_read_buffer;
 std::vector<uint8_t> RegisterManager::m_write_buffer;
 
 std::unordered_map<uint8_t, RequestVariant> RegisterManager::m_request_map;
-std::unordered_map<uint8_t, Command> RegisterManager::m_command_map;
+std::unordered_map<uint8_t, CommandVariant> RegisterManager::m_command_map;
 
 
 status_utils::StatusCode RegisterManager::update(uint8_t reg, const std::vector<uint8_t>& incoming_data)
@@ -62,8 +62,31 @@ status_utils::StatusCode RegisterManager::update(uint8_t reg, const std::vector<
     
     // If the register exists, call its runnable
     if(m_command_map.find(reg) != m_command_map.end()){
-        // Serial.println("Command Map Called");
-        return m_command_map.at(reg).m_runnable(incoming_data);
+        
+        CommandVariant command = m_command_map.at(reg);
+        
+        if(holds_alternative<Command<double>>(command))
+        {
+            double data = ByteConverter::bytes_to_double(incoming_data);
+
+            return std::get<Command<double>>(command).run(data);
+        }
+        else if(holds_alternative<Command<float>>(command))
+        {
+            float data = ByteConverter::bytes_to_float(incoming_data);
+
+            return std::get<Command<float>>(command).run(data);
+        }
+        else if(holds_alternative<Command<int>>(command))
+        {
+            int data = ByteConverter::bytes_to_int(incoming_data);
+
+            return std::get<Command<int>>(command).run(data);
+        }
+        else if(holds_alternative<Command<void>>(command))
+        {
+            return std::get<Command<void>>(command).run(0);
+        }
     }
 
     return status_utils::StatusCode::FAILED;
@@ -127,28 +150,6 @@ void RegisterManager::clear_write_buffer()
     m_write_buffer.clear();
 
 } // end of "clear_write_buffer()"
-
-
-void RegisterManager::add_command(Command command)
-{
-    // register, command
-    m_command_map.insert({command.m_reg, command});
-
-} // end of "add_command"
-
-
-void RegisterManager::add_command(uint8_t reg, int length, std::function<status_utils::StatusCode(const std::vector<uint8_t>&)> runnable)
-{
-    Command command = 
-    {
-        .m_reg = reg,
-        .m_length = length,
-        .m_runnable = runnable
-    };
-
-    add_command(command);
-
-} // end of "add_command"
 
 
 uint8_t RegisterManager::extract_register()

@@ -19,7 +19,7 @@ add_library(${PROJECT_NAME}
     src/communication/protocols/serial_interface.cpp
 
     # Register Stuff
-    src/registers/command_struct.cpp
+    src/registers/command.cpp
     src/registers/register_manager.cpp
     src/registers/request.cpp
 

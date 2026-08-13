@@ -5,7 +5,7 @@
 #include <unordered_map>
 #include <variant>
 
-#include "WireLib/registers/command_struct.hpp"
+#include "WireLib/registers/command.hpp"
 #include "WireLib/registers/request.hpp"
 
 #include "WireLib/util/byte_converter.hpp"
@@ -13,6 +13,7 @@
 #include "EmbeddedLib/status.hpp"
 
 
+using CommandVariant = std::variant<Command<int>, Command<float>, Command<double>, Command<void>>;
 using RequestVariant = std::variant<Request<int>, Request<float>, Request<double>>;
 
 
@@ -100,17 +101,8 @@ class RegisterManager
          * 
          * @param command `Command` The command to add
          */
-        static void add_command(Command command);
-
-        /**
-         * @brief Add a command to the command map
-         * 
-         * @param reg `uint8_t` The register
-         * @param length `int` The length of the data to recieve in bytes
-         * @param runnable `std::function<status_utils::StatusCode(std::vector<uint8_t>*)>` The runnable that will use 
-         * the recieved bytes
-         */
-        static void add_command(uint8_t reg, int length, std::function<status_utils::StatusCode(const std::vector<uint8_t>&)> runnable);
+        template <typename T>
+        static void add_command(Command<T> command);
 
         /**
          * @brief Extracts only the register byte of the read buffer (the first element)
@@ -130,7 +122,7 @@ class RegisterManager
 
         // Maps to get the request / command associated with a register (uint8_t)
         static std::unordered_map<uint8_t, RequestVariant> m_request_map;
-        static std::unordered_map<uint8_t, Command> m_command_map;
+        static std::unordered_map<uint8_t, CommandVariant> m_command_map;
         
 }; // class RegisterManager
 
