@@ -27,6 +27,9 @@ StatusCode WireManager::on_receive(const std::vector<uint8_t>& bytes)
     // This is safe because `transmit_bytes` copies the values, it doesn't use a pointer to the argument
     RegisterManager::clear_write_buffer();
 
+    // Clear the read buffer since we just used the incoming bytes
+    RegisterManager::clear_read_buffer();
+
     return transmit_status;
 
 } // end of "on_recieve"
