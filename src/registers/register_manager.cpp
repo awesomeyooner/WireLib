@@ -6,8 +6,8 @@
 std::vector<uint8_t> RegisterManager::m_read_buffer;
 std::vector<uint8_t> RegisterManager::m_write_buffer;
 
-std::unordered_map<uint8_t, Request> RegisterManager::m_request_map;
-std::unordered_map<uint8_t, Command> RegisterManager::m_command_map;
+std::unordered_map<uint8_t, RequestVariant> RegisterManager::m_request_map;
+std::unordered_map<uint8_t, CommandVariant> RegisterManager::m_command_map;
 
 
 status_utils::StatusCode RegisterManager::update(uint8_t reg, const std::vector<uint8_t>& incoming_data)
@@ -18,14 +18,73 @@ status_utils::StatusCode RegisterManager::update(uint8_t reg, const std::vector<
 
     // If the register exists, call its runnable
     if(m_request_map.find(reg) != m_request_map.end()){
-        // Serial.println("Request Map Called");
-        return m_request_map.at(reg).m_runnable(m_write_buffer);
+
+        RequestVariant request = m_request_map.at(reg);
+        
+        // Double
+        if(holds_alternative<Request<double>>(request))
+        {
+            auto request_call = std::get<Request<double>>(request).get_bytes();
+
+            if(!request_call.is_OK())
+                return request_call.status;
+            
+            set_write_buffer(request_call.value);
+
+            return StatusCode::OK;
+        }
+        // Float
+        else if(holds_alternative<Request<float>>(m_request_map.at(reg)))
+        {
+            auto request_call = std::get<Request<double>>(request).get_bytes();
+
+            if(!request_call.is_OK())
+                return request_call.status;
+            
+            set_write_buffer(request_call.value);
+
+            return StatusCode::OK;
+        }
+        // Int
+        else if(holds_alternative<Request<int>>(m_request_map.at(reg)))
+        {
+            auto request_call = std::get<Request<double>>(request).get_bytes();
+
+            if(!request_call.is_OK())
+                return request_call.status;
+            
+            set_write_buffer(request_call.value);
+
+            return StatusCode::OK;
+        }
     }
     
     // If the register exists, call its runnable
     if(m_command_map.find(reg) != m_command_map.end()){
-        // Serial.println("Command Map Called");
-        return m_command_map.at(reg).m_runnable(incoming_data);
+        
+        CommandVariant command = m_command_map.at(reg);
+        
+        // Double
+        if(holds_alternative<Command<double>>(command))
+        {
+            double data = ByteConverter::from_bytes<double>(incoming_data);
+
+            return std::get<Command<double>>(command).run(data);
+        }
+        // Float
+        else if(holds_alternative<Command<float>>(command))
+        {
+            float data = ByteConverter::from_bytes<float>(incoming_data);
+
+            return std::get<Command<float>>(command).run(data);
+        }
+        // Int
+        else if(holds_alternative<Command<int>>(command))
+        {
+            int data = ByteConverter::from_bytes<int>(incoming_data);
+
+            return std::get<Command<int>>(command).run(data);
+        }
     }
 
     return status_utils::StatusCode::FAILED;
@@ -52,7 +111,8 @@ status_utils::StatusCode RegisterManager::update()
 void RegisterManager::set_read_buffer(const std::vector<uint8_t>& data)
 {
     m_read_buffer.assign(data.begin(), data.end());
-}
+
+} // end of "set_read_buffer(const std::vector<uint8_t>&)"
 
 
 const std::vector<uint8_t>& RegisterManager::get_read_buffer()
@@ -62,6 +122,20 @@ const std::vector<uint8_t>& RegisterManager::get_read_buffer()
 } // end of "get_read_buffer"
 
 
+void RegisterManager::clear_read_buffer()
+{
+    m_read_buffer.clear();
+
+} // end of "clear_read_buffer()"
+
+
+void RegisterManager::set_write_buffer(const std::vector<uint8_t>& data)
+{
+    m_write_buffer.assign(data.begin(), data.end());
+
+} // end of "set_read_buffer(const std::vector<uint8_t>&)"
+
+
 std::vector<uint8_t>& RegisterManager::get_write_buffer()
 {
     return m_write_buffer;
@@ -69,48 +143,11 @@ std::vector<uint8_t>& RegisterManager::get_write_buffer()
 } // end of "get_write_buffer"
 
 
-void RegisterManager::add_request(Request request)
+void RegisterManager::clear_write_buffer()
 {
-    // register, request
-    m_request_map.insert({request.m_reg, request});
+    m_write_buffer.clear();
 
-} // end of "add_request"
-
-
-void RegisterManager::add_request(uint8_t reg, int length, std::function<status_utils::StatusCode(std::vector<uint8_t>&)> runnable)
-{
-    Request request = 
-    {
-        .m_reg = reg,
-        .m_length = length,
-        .m_runnable = runnable
-    };
-
-    add_request(request);
-
-} // end of "add_request"
-
-
-void RegisterManager::add_command(Command command)
-{
-    // register, command
-    m_command_map.insert({command.m_reg, command});
-
-} // end of "add_command"
-
-
-void RegisterManager::add_command(uint8_t reg, int length, std::function<status_utils::StatusCode(const std::vector<uint8_t>&)> runnable)
-{
-    Command command = 
-    {
-        .m_reg = reg,
-        .m_length = length,
-        .m_runnable = runnable
-    };
-
-    add_command(command);
-
-} // end of "add_command"
+} // end of "clear_write_buffer()"
 
 
 uint8_t RegisterManager::extract_register()
