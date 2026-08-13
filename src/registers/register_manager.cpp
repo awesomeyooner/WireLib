@@ -21,6 +21,7 @@ status_utils::StatusCode RegisterManager::update(uint8_t reg, const std::vector<
 
         RequestVariant request = m_request_map.at(reg);
         
+        // Double
         if(holds_alternative<Request<double>>(request))
         {
             auto request_call = std::get<Request<double>>(request).get_bytes();
@@ -32,11 +33,10 @@ status_utils::StatusCode RegisterManager::update(uint8_t reg, const std::vector<
 
             return StatusCode::OK;
         }
+        // Float
         else if(holds_alternative<Request<float>>(m_request_map.at(reg)))
         {
-            auto request = std::get<Request<float>>(m_request_map.at(reg));
-
-            auto request_call = request.get_bytes();
+            auto request_call = std::get<Request<double>>(request).get_bytes();
 
             if(!request_call.is_OK())
                 return request_call.status;
@@ -45,11 +45,10 @@ status_utils::StatusCode RegisterManager::update(uint8_t reg, const std::vector<
 
             return StatusCode::OK;
         }
+        // Int
         else if(holds_alternative<Request<int>>(m_request_map.at(reg)))
         {
-            auto request = std::get<Request<int>>(m_request_map.at(reg));
-
-            auto request_call = request.get_bytes();
+            auto request_call = std::get<Request<double>>(request).get_bytes();
 
             if(!request_call.is_OK())
                 return request_call.status;
@@ -65,18 +64,21 @@ status_utils::StatusCode RegisterManager::update(uint8_t reg, const std::vector<
         
         CommandVariant command = m_command_map.at(reg);
         
+        // Double
         if(holds_alternative<Command<double>>(command))
         {
             double data = ByteConverter::bytes_to_double(incoming_data);
 
             return std::get<Command<double>>(command).run(data);
         }
+        // Float
         else if(holds_alternative<Command<float>>(command))
         {
             float data = ByteConverter::bytes_to_float(incoming_data);
 
             return std::get<Command<float>>(command).run(data);
         }
+        // Int
         else if(holds_alternative<Command<int>>(command))
         {
             int data = ByteConverter::bytes_to_int(incoming_data);
