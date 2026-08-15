@@ -6,17 +6,17 @@ using namespace status_utils;
 
 
 template <typename T>
-Request<T>::Request(uint32_t reg, function<StatusedValue<T>()> runnable)
+Request<T>::Request(uint8_t reg, function<StatusedValue<T>()> runnable)
 {
     m_reg = reg;
     m_length = sizeof(T);
     m_runnable = runnable;
     
-} // end of "Request(uint32_t, function<StatusedValue<T>>)"
+} // end of "Request(uint8_t, function<StatusedValue<T>>)"
 
 
 template <typename T>
-Request<T>::Request(uint32_t reg, function<T()> runnable)
+Request<T>::Request(uint8_t reg, function<T()> runnable)
 {
     m_reg = reg;
     m_length = sizeof(T);
@@ -27,7 +27,7 @@ Request<T>::Request(uint32_t reg, function<T()> runnable)
             return StatusedValue<T>(runnable(), StatusCode::OK);
         };
     
-} // end of "Request(uint32_t, function<StatusedValue<T>>)"
+} // end of "Request(uint8_t, function<StatusedValue<T>>)"
 
 
 template<typename T>

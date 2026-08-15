@@ -47,9 +47,9 @@ class Request
         // in RegisterManager
         std::function<status_utils::StatusedValue<T>()> m_runnable;
 
-        Request(uint32_t reg, std::function<status_utils::StatusedValue<T>()> runnable);
+        Request(uint8_t reg, std::function<status_utils::StatusedValue<T>()> runnable);
 
-        Request(uint32_t reg, std::function<T()> runnable);
+        Request(uint8_t reg, std::function<T()> runnable);
 
         status_utils::StatusedValue<std::vector<uint8_t>> get_bytes();
 
