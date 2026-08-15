@@ -9,7 +9,14 @@ template <typename T>
 Request<T>::Request(uint8_t reg, function<StatusedValue<T>()> runnable)
 {
     m_reg = reg;
-    m_length = sizeof(T);
+
+    // If the type is string or byte vector
+    // Then the length can vary, indicate with -1
+    if constexpr (std::is_same_v<T, string> || std::is_same_v<T, vector<uint8_t>>)
+        m_length = -1;
+    else
+        m_length = sizeof(T);
+
     m_runnable = runnable;
     
 } // end of "Request(uint8_t, function<StatusedValue<T>>)"

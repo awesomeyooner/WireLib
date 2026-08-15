@@ -17,46 +17,35 @@ status_utils::StatusCode RegisterManager::update(uint8_t reg, const std::vector<
         return status_utils::StatusCode::FAILED;
 
     // If the register exists, call its runnable
-    if(m_request_map.find(reg) != m_request_map.end()){
-
+    if(m_request_map.find(reg) != m_request_map.end())
+    {
         RequestVariant request = m_request_map.at(reg);
         
+        // Placeholder for the return value of `.get_bytes()`
+        StatusedValue<vector<uint8_t>> request_call = {{}, StatusCode::FAILED};
+
         // Double
         if(holds_alternative<Request<double>>(request))
-        {
-            auto request_call = std::get<Request<double>>(request).get_bytes();
-
-            if(!request_call.is_OK())
-                return request_call.status;
-            
-            set_write_buffer(request_call.value);
-
-            return StatusCode::OK;
-        }
+            request_call = std::get<Request<double>>(request).get_bytes();
         // Float
         else if(holds_alternative<Request<float>>(m_request_map.at(reg)))
-        {
-            auto request_call = std::get<Request<double>>(request).get_bytes();
-
-            if(!request_call.is_OK())
-                return request_call.status;
-            
-            set_write_buffer(request_call.value);
-
-            return StatusCode::OK;
-        }
+            request_call = std::get<Request<float>>(request).get_bytes();
         // Int
         else if(holds_alternative<Request<int>>(m_request_map.at(reg)))
-        {
-            auto request_call = std::get<Request<double>>(request).get_bytes();
+            request_call = std::get<Request<int>>(request).get_bytes();
+        // String
+        else if(holds_alternative<Request<string>>(m_request_map.at(reg)))
+            request_call = std::get<Request<string>>(request).get_bytes();
+        // Bytes
+        else if(holds_alternative<Request<vector<uint8_t>>>(m_request_map.at(reg)))
+            request_call = std::get<Request<vector<uint8_t>>>(request).get_bytes();
 
-            if(!request_call.is_OK())
-                return request_call.status;
-            
-            set_write_buffer(request_call.value);
+        if(!request_call.is_OK())
+            return request_call.status;
+        
+        set_write_buffer(request_call.value);
 
-            return StatusCode::OK;
-        }
+        return StatusCode::OK;
     }
     
     // If the register exists, call its runnable
@@ -84,6 +73,18 @@ status_utils::StatusCode RegisterManager::update(uint8_t reg, const std::vector<
             int data = ByteConverter::from_bytes<int>(incoming_data);
 
             return std::get<Command<int>>(command).run(data);
+        }
+        // String
+        else if(holds_alternative<Command<string>>(command))
+        {
+            string data = ByteConverter::from_bytes<string>(incoming_data);
+
+            return std::get<Command<string>>(command).run(data);
+        }
+        // Bytes
+        else if(holds_alternative<Command<vector<uint8_t>>>(command))
+        {
+            return std::get<Command<vector<uint8_t>>>(command).run(incoming_data);
         }
     }
 

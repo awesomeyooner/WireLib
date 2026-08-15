@@ -19,6 +19,9 @@ T ByteConverter::from_bytes(const vector<uint8_t>& v_bytes)
     // String
     else if constexpr (std::is_same_v<T, string>)
         return bytes_to_string(v_bytes);
+    // Bytes (just return value since it's already bytes)
+    else if constexpr (std::is_same_v<T, vector<uint8_t>>)
+        return v_bytes;
     // Everything else
     else
         return T{};
@@ -41,6 +44,9 @@ vector<uint8_t> ByteConverter::to_bytes(T value)
     // String
     else if constexpr (std::is_same_v<T, string>)
         return string_to_bytes(value);
+    // Bytes (just return value since it's already bytes)
+    else if constexpr (std::is_same_v<T, vector<uint8_t>>)
+        return value;
     // Everything else
     else
         return {};
