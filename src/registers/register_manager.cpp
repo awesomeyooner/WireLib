@@ -19,26 +19,26 @@ status_utils::StatusCode RegisterManager::update(uint8_t reg, const std::vector<
     // If the register exists, call its runnable
     if(m_request_map.find(reg) != m_request_map.end())
     {
-        RequestVariant request = m_request_map.at(reg);
+        RequestVariant request_variant = m_request_map.at(reg);
         
         // Placeholder for the return value of `.get_bytes()`
         StatusedValue<vector<uint8_t>> request_call = {{}, StatusCode::FAILED};
 
         // Double
-        if(holds_alternative<Request<double>>(request))
-            request_call = std::get<Request<double>>(request).get_bytes();
+        if(holds_alternative<Request<double>>(request_variant))
+            request_call = std::get<Request<double>>(request_variant).get_bytes();
         // Float
-        else if(holds_alternative<Request<float>>(m_request_map.at(reg)))
-            request_call = std::get<Request<float>>(request).get_bytes();
+        else if(holds_alternative<Request<float>>(request_variant))
+            request_call = std::get<Request<float>>(request_variant).get_bytes();
         // Int
-        else if(holds_alternative<Request<int>>(m_request_map.at(reg)))
-            request_call = std::get<Request<int>>(request).get_bytes();
+        else if(holds_alternative<Request<int>>(request_variant))
+            request_call = std::get<Request<int>>(request_variant).get_bytes();
         // String
-        else if(holds_alternative<Request<string>>(m_request_map.at(reg)))
-            request_call = std::get<Request<string>>(request).get_bytes();
+        else if(holds_alternative<Request<string>>(request_variant))
+            request_call = std::get<Request<string>>(request_variant).get_bytes();
         // Bytes
-        else if(holds_alternative<Request<vector<uint8_t>>>(m_request_map.at(reg)))
-            request_call = std::get<Request<vector<uint8_t>>>(request).get_bytes();
+        else if(holds_alternative<Request<vector<uint8_t>>>(request_variant))
+            request_call = std::get<Request<vector<uint8_t>>>(request_variant).get_bytes();
 
         if(!request_call.is_OK())
             return request_call.status;
@@ -51,40 +51,70 @@ status_utils::StatusCode RegisterManager::update(uint8_t reg, const std::vector<
     // If the register exists, call its runnable
     if(m_command_map.find(reg) != m_command_map.end()){
         
-        CommandVariant command = m_command_map.at(reg);
+        CommandVariant command_variant = m_command_map.at(reg);
         
         // Double
-        if(holds_alternative<Command<double>>(command))
+        if(holds_alternative<Command<double>>(command_variant))
         {
+            auto command = std::get<Command<double>>(command_variant);
+
+            // If using acknowledgement then send back the incoming bytes
+            if(command.use_acknowledgement())
+                set_write_buffer(incoming_data);
+
             double data = ByteConverter::from_bytes<double>(incoming_data);
 
-            return std::get<Command<double>>(command).run(data);
+            return command.run(data);
         }
         // Float
-        else if(holds_alternative<Command<float>>(command))
+        else if(holds_alternative<Command<float>>(command_variant))
         {
+            auto command = std::get<Command<float>>(command_variant);
+
+            // If using acknowledgement then send back the incoming bytes
+            if(command.use_acknowledgement())
+                set_write_buffer(incoming_data);
+
             float data = ByteConverter::from_bytes<float>(incoming_data);
 
-            return std::get<Command<float>>(command).run(data);
+            return command.run(data);
         }
         // Int
-        else if(holds_alternative<Command<int>>(command))
+        else if(holds_alternative<Command<int>>(command_variant))
         {
+            auto command = std::get<Command<int>>(command_variant);
+
+            // If using acknowledgement then send back the incoming bytes
+            if(command.use_acknowledgement())
+                set_write_buffer(incoming_data);
+
             int data = ByteConverter::from_bytes<int>(incoming_data);
 
-            return std::get<Command<int>>(command).run(data);
+            return command.run(data);
         }
         // String
-        else if(holds_alternative<Command<string>>(command))
+        else if(holds_alternative<Command<string>>(command_variant))
         {
+            auto command = std::get<Command<string>>(command_variant);
+
+            // If using acknowledgement then send back the incoming bytes
+            if(command.use_acknowledgement())
+                set_write_buffer(incoming_data);
+
             string data = ByteConverter::from_bytes<string>(incoming_data);
 
-            return std::get<Command<string>>(command).run(data);
+            return command.run(data);
         }
         // Bytes
-        else if(holds_alternative<Command<vector<uint8_t>>>(command))
+        else if(holds_alternative<Command<vector<uint8_t>>>(command_variant))
         {
-            return std::get<Command<vector<uint8_t>>>(command).run(incoming_data);
+            auto command = std::get<Command<vector<uint8_t>>>(command_variant);
+
+            // If using acknowledgement then send back the incoming bytes
+            if(command.use_acknowledgement())
+                set_write_buffer(incoming_data);
+
+            return command.run(incoming_data);
         }
     }
 

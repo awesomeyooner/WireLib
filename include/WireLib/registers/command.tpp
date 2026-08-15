@@ -6,9 +6,11 @@ using namespace status_utils;
 
 
 template <typename T>
-Command<T>::Command(uint8_t reg, function<StatusCode(T)> runnable)
+Command<T>::Command(uint8_t reg, function<StatusCode(T)> runnable, bool use_acknowledgement)
 {
     m_reg = reg;
+
+    m_use_acknowledgement = use_acknowledgement;
 
     // If the type is string or byte vector
     // Then the length can vary, indicate with -1
@@ -19,13 +21,13 @@ Command<T>::Command(uint8_t reg, function<StatusCode(T)> runnable)
 
     m_runnable = runnable;
 
-} // end of "Command(uint8_t, function<StatusCode(T)>)"
+} // end of "Command(uint8_t, function<StatusCode(T)>, bool = false)"
 
 
 template <typename T>
-Command<T>::Command(uint8_t reg, function<StatusCode()> runnable)
-    : Command(reg, [runnable](T){return runnable();})
-{} // end of "Command(uint8_t, function<StatusCode()>)"
+Command<T>::Command(uint8_t reg, function<StatusCode()> runnable, bool use_acknowledgement)
+    : Command(reg, [runnable](T){return runnable();}, use_acknowledgement)
+{} // end of "Command(uint8_t, function<StatusCode()>, bool = false)"
 
 
 template <typename T>
@@ -50,3 +52,11 @@ StatusCode Command<T>::run(T data)
     return m_runnable(data);
 
 } // end of "run(T)"
+
+
+template <typename T>
+bool Command<T>::use_acknowledgement()
+{
+    return m_use_acknowledgement;
+
+} // end of "use_acknowledgement()"

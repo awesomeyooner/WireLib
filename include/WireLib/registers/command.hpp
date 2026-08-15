@@ -39,8 +39,9 @@ class Command
          * @param reg `uint8_t` The register to use
          * @param runnable `std::function<status_utils::StatusCode()` A function that returns a StatusCode that takes in
          * a parameter of type T
+         * @param use_acknowledgement `bool = false` Set to true to enable the usage of acknowledge packet
          */
-        Command(uint8_t reg, std::function<status_utils::StatusCode(T)> runnable);
+        Command(uint8_t reg, std::function<status_utils::StatusCode(T)> runnable, bool use_acknowledgement = false);
 
         /**
          * @brief Create a new command at the given register and runnable action that doesn't use the data given.
@@ -61,8 +62,9 @@ class Command
          * @param reg `uint8_t` The register to use
          * @param runnable `std::function<status_utils::StatusCode()` A function that returns a StatusCode without
          * any parameters
+         * @param use_acknowledgement `bool = false` Set to true to enable the usage of acknowledge packet
          */
-        Command(uint8_t reg, std::function<status_utils::StatusCode()> runnable);
+        Command(uint8_t reg, std::function<status_utils::StatusCode()> runnable, bool use_acknowledgement = false);
 
         /**
          * @brief Get the register this Command is associated with
@@ -86,6 +88,14 @@ class Command
          */
         status_utils::StatusCode run(T data);
 
+        /**
+         * @brief Get the flag for whether acknowledgement is enabled or not
+         * 
+         * @return `true` 
+         * @return `false` 
+         */
+        bool use_acknowledgement();
+
     private:
 
         // The register byte
@@ -93,6 +103,9 @@ class Command
 
         // The length of the data packet to recieve
         int m_length;
+
+        // Flag to send back the bytes given. Set to true to enable
+        bool m_use_acknowledgement = false;
 
         // The runnable that uses the incoming data. The parameter is the datatype
         // sent from the host
