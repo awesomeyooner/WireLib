@@ -13,8 +13,8 @@
 #include "EmbeddedLib/status.hpp"
 
 
-using CommandVariant = std::variant<Command<int>, Command<float>, Command<double>>;
-using RequestVariant = std::variant<Request<int>, Request<float>, Request<double>>;
+using CommandVariant = std::variant< Command<int>, Command<float>, Command<double>, Command<std::string>, Command<std::vector<uint8_t>> >;
+using RequestVariant = std::variant< Request<int>, Request<float>, Request<double>, Request<std::string>, Request<std::vector<uint8_t>> >;
 
 
 class RegisterManager
