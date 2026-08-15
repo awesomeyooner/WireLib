@@ -18,7 +18,7 @@ Command<T>::Command(uint8_t reg, function<StatusCode(T)> runnable)
 
     m_runnable = runnable;
 
-} // end of "Command(uint32_t, function<StatusCode(T)>)"
+} // end of "Command(uint8_t, function<StatusCode(T)>)"
 
 
 template <typename T>
@@ -38,7 +38,7 @@ Command<T>::Command(uint8_t reg, function<StatusCode()> runnable)
         return runnable();
     };
 
-} // end of "Command(uint32_t, function<StatusCode()>)"
+} // end of "Command(uint8_t, function<StatusCode()>)"
 
 
 template <typename T>
