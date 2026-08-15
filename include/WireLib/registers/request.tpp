@@ -17,17 +17,8 @@ Request<T>::Request(uint8_t reg, function<StatusedValue<T>()> runnable)
 
 template <typename T>
 Request<T>::Request(uint8_t reg, function<T()> runnable)
-{
-    m_reg = reg;
-    m_length = sizeof(T);
-
-    // Wrap the runnable in StatusedValue
-    m_runnable = [runnable]()
-        {
-            return StatusedValue<T>(runnable(), StatusCode::OK);
-        };
-    
-} // end of "Request(uint8_t, function<StatusedValue<T>>)"
+    : Request(reg, [runnable](){return StatusedValue<T>(runnable(), StatusCode::OK);})
+{} // end of "Request(uint8_t, function<StatusedValue<T>>)"
 
 
 template<typename T>

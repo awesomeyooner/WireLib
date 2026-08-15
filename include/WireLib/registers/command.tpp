@@ -23,22 +23,8 @@ Command<T>::Command(uint8_t reg, function<StatusCode(T)> runnable)
 
 template <typename T>
 Command<T>::Command(uint8_t reg, function<StatusCode()> runnable)
-{
-    m_reg = reg;
-   
-    // If the type is void
-    if constexpr (std::is_void_v<T>)
-        m_length = 0;
-    else
-        m_length = sizeof(T);
-
-    // Wrap the runnable to not accept anything
-    m_runnable = [runnable]()
-    {
-        return runnable();
-    };
-
-} // end of "Command(uint8_t, function<StatusCode()>)"
+    : Command(reg, [runnable](T){return runnable();})
+{} // end of "Command(uint8_t, function<StatusCode()>)"
 
 
 template <typename T>
