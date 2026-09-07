@@ -1,6 +1,7 @@
 #ifndef SERIAL_INTERFACE_HPP
 #define SERIAL_INTERFACE_HPP
 
+
 #include "EmbeddedLib/system.hpp"
 #include "EmbeddedLib/util/string_formatter.hpp"
 

@@ -18,6 +18,9 @@ add_library(${PROJECT_NAME}
     src/communication/protocols/serial_api.cpp
     src/communication/protocols/serial_interface.cpp
 
+    # CANBus
+    src/communication/protocols/canbus/can_interface.cpp
+
     # Register Stuff
     src/registers/register_manager.cpp
 
