@@ -53,10 +53,20 @@ init()
             return StatusCode::OK;
         }
     );
-}
+
+    // Wait for COM Port to be opened
+    while(!Serial.is_connected())
+    {
+        HAL_Delay(100);
+    }
+
+    Serial.println("Hello World!");
+
+} // end of "init()"
 
 update()
 {
     ActionManager::update();
-}
+
+} // end of "update()"
 ```
