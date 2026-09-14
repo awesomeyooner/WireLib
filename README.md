@@ -35,6 +35,17 @@ Each one links to their respective setup guides
 - `CAN` (Planned)
 - `I2C` (Planned)
 
+### Disabling certain build components
+
+By default, including `WireLib` will compile all `.cpp` files, but some of them require things like `can.h`, serial files, etc, which are not always present in your specific project. Here is a list of available options
+
+> **NOTE** For whatever reason, cmake complains when you simply use `set(WIRELIB_BUILD_XXX OFF)`, so I've updated it to forcefully change it
+
+| Dependent(s) | Description | Required Line |
+| --- | --- | --- |
+| `can.h` | CAN Bus | `set(WIRELIB_BUILD_CAN OFF CACHE BOOL "Disable CAN compiling" FORCE)`
+| USB CDC | USB CDC | `set(WIRELIB_BUILD_SERIAL OFF CACHE BOOL "Disable USB CDC compiling" FORCE)`
+
 ### Registers
 
 There are two types of Registers:

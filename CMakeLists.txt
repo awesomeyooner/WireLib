@@ -4,9 +4,7 @@ project( WireLib LANGUAGES C CXX )
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# === Main Library ===
-add_library(${PROJECT_NAME}
-
+set(SRC_FILES
     # Wire Manager
     src/communication/wire_manager.cpp
 
@@ -14,18 +12,47 @@ add_library(${PROJECT_NAME}
     src/communication/communication_interface.cpp
     src/communication/communication_api.cpp
 
-    # Serial
-    src/communication/protocols/serial_api.cpp
-    src/communication/protocols/serial_interface.cpp
-
-    # CANBus
-    src/communication/protocols/canbus/can_interface.cpp
-
     # Register Stuff
     src/registers/register_manager.cpp
 
     # Utils
     src/util/byte_converter.cpp
+)
+
+# Serial
+    option(WIRELIB_BUILD_SERIAL
+        "Compile code that uses USB CDC"
+        ON
+    )
+
+    if(WIRELIB_BUILD_SERIAL)
+
+        # SRC_FILES is a list of all `.cpp` files
+        list(APPEND SRC_FILES
+            src/communication/protocols/serial_api.cpp
+            src/communication/protocols/serial_interface.cpp
+        )
+
+    endif()
+
+# CANBus
+    option(WIRELIB_BUILD_CAN
+        "Compile code that uses `can.h`"
+        ON
+    )
+
+    if(WIRELIB_BUILD_CAN)
+
+        # SRC_FILES is a list of all `.cpp` files
+        list(APPEND SRC_FILES
+            src/communication/protocols/canbus/can_interface.cpp
+        )
+
+    endif()
+
+# === Main Library ===
+add_library(${PROJECT_NAME}
+    ${SRC_FILES}
 )
 
 target_include_directories(${PROJECT_NAME}
