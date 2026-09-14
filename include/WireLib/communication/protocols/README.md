@@ -19,6 +19,10 @@ Then add the actual call
 // Line 266
 Serial_on_receive(Buf, *Len);
 // Add it at the end, right before the return statement
+
+// Line 231
+Serial_update_connection_status(pbuf);
+// Add it inside CDC_SET_CONTROL_LINE_STATE
 ```
 
 ## Usage

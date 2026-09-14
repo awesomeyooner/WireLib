@@ -122,4 +122,24 @@ StatusCode SerialInterface::error(double data, int decimals)
 } // end of "error(double, int)"
 
 
+// Implementation from https://community.st.com/stm32-mcus-embedded-software-32/how-to-detect-if-usb-connection-is-established-127806
+void SerialInterface::update_connection_status(uint8_t* pbuf)
+{
+    uint8_t state = pbuf[2];
+
+    if(state & 0x01)
+        m_is_connected = true;
+    else
+        m_is_connected = false;
+
+} // end of "update_connection_status(uint8_t*)"
+
+
+bool SerialInterface::is_connected()
+{
+    return m_is_connected;
+
+} // end of "is_connected()"
+
+
 SerialInterface Serial = SerialInterface();

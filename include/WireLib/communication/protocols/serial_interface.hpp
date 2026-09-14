@@ -129,6 +129,28 @@ class SerialInterface : public CommunicationInterface
          */
         status_utils::StatusCode error(double data, int decimals = 3);
 
+        /**
+         * @brief HAL level update function to check whether a COM port is opened. This updates `m_is_connected()`
+         * and the status can be gotten with `is_connected()`
+         * 
+         * @param pbuf `uint8_t*`
+         */
+        void update_connection_status(uint8_t* pbuf);
+
+        /**
+         * @brief Get whether the COM port is opened or not. This doesn't check if the USB is connected, but if it is connected
+         * AND an active COM port terminal is opened too
+         * 
+         * @return `true` If COM port opened
+         * @return `false` Otherwise
+         */
+        bool is_connected();
+    
+    private:
+
+        // True if the USB is connected and COM port is opened
+        bool m_is_connected = false;
+
 }; // class Serial
 
 
