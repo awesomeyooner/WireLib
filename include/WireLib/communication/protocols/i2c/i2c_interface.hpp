@@ -14,5 +14,13 @@
 #include <functional>
 
 
+class I2CInterface : public CommunicationInterface
+{
+    
+    public:
+
+}; // class I2CInterface : public CommunicationInterface
+
+
 
 #endif // I2C_INTERFACE_HPP
