@@ -50,8 +50,24 @@ set(SRC_FILES
 
     endif()
 
+# I2C
+    option(WIRELIB_BUILD_I2C
+        "Compile code that uses `i2c.h`"
+        ON
+    )
+
+    if(WIRELIB_BUILD_I2C)
+
+        # SRC_FILES is a list of all `.cpp` files
+        list(APPEND SRC_FILES
+            src/communication/protocols/i2c/i2c_api.cpp
+            src/communication/protocols/i2c/i2c_interface.cpp
+        )
+
+    endif()
+
 # === Main Library ===
-add_library(${PROJECT_NAME}
+add_library(${PROJECT_NAME} OBJECT
     ${SRC_FILES}
 )
 
