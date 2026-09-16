@@ -33,7 +33,7 @@ Each one links to their respective setup guides
 
 - [`Serial`](include/WireLib/communication/protocols/README.md)
 - `CAN` (Planned)
-- `I2C` (Planned)
+- [`I2C`](include/WireLib/communication/protocols/i2c/README.md)
 
 ### Disabling certain build components
 
