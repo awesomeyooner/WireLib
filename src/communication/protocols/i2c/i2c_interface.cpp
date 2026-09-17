@@ -22,13 +22,12 @@ void I2CInterface::set_i2c(I2C_HandleTypeDef* i2c)
 } // end of "set_i2c(I2C_HandleTypeDef*)"
 
 
+// Just copy to the write buffer because `on_address` handles the actual data transmission
 StatusCode I2CInterface::transmit_bytes(const std::vector<uint8_t>& bytes)
 {
     copy_to_write_buffer(bytes);
 
-    HAL_StatusTypeDef status = HAL_I2C_Slave_Transmit(m_i2c, m_write_buffer.data(), bytes.size(), m_timeout_ms);
-
-    return status == HAL_OK ? StatusCode::OK : StatusCode::FAILED;
+    return StatusCode::OK;
 
 } // end of "transmit_bytes(const std::vector<uint8_t>&)"
 
@@ -43,6 +42,12 @@ void I2CInterface::on_address(I2C_HandleTypeDef* hi2c, uint8_t TransferDirection
     if(TransferDirection == I2C_DIRECTION_TRANSMIT)
         HAL_I2C_Slave_Seq_Receive_IT(hi2c, m_raw_read_buffer.data(), m_raw_read_buffer.size(), I2C_FIRST_AND_LAST_FRAME);
 
+    // Master wants to receive data
+    else if(TransferDirection == I2C_DIRECTION_RECEIVE)
+        HAL_I2C_Slave_Seq_Transmit_IT(hi2c, m_write_buffer.data(), m_write_buffer.size(), I2C_FIRST_AND_LAST_FRAME);
+        
+        // HAL_GPIO_WritePin(GPIOC, GPIO_PIN_1, GPIO_PIN_SET);
+
 } // end of "on_address(I2C_HandleTypeDef*, uint8_t, uint8_t)"
 
 
@@ -54,10 +59,15 @@ void I2CInterface::on_listen_complete(I2C_HandleTypeDef* hi2c)
 
     uint32_t num_bytes = m_raw_read_buffer.size() - hi2c->XferCount;
 
-    on_receive(
-        m_raw_read_buffer.data(),
-        num_bytes
-    );
+    // Only call the on_receive callback when there's bytes read
+    if(num_bytes != 0)
+    {
+        on_receive(
+            m_raw_read_buffer.data(),
+            num_bytes
+        );
+
+    }
 
     HAL_I2C_EnableListen_IT(hi2c);
      
